@@ -4,242 +4,100 @@ from ROOT import TVector2, TLorentzVector, TMath
 ROOT.gROOT.SetBatch(True)
  #------------------------------------------------------------------
 class observable:
-    def __init__(self):
+    def __init__(self, event, isdata):
 
         self.varibales={}
-
-    def getJetSum(self, event):
-        j1_t3 = ROOT.TLorentzVector() 
-        j2_t3 = ROOT.TLorentzVector() 
-        j3_t3 = ROOT.TLorentzVector() 
-        j4_t3 = ROOT.TLorentzVector() 
-        j5_t3 = ROOT.TLorentzVector() 
-        j6_t3 = ROOT.TLorentzVector() 
-        j7_t3 = ROOT.TLorentzVector() 
-        j8_t3 = ROOT.TLorentzVector() 
-        jetSum = ROOT.TLorentzVector() 
-
-        if event.jetPt.size() > 0: j1_t3.SetPtEtaPhiM(event.jetPt[0], event.jetEta[0], event.jetPhi[0], event.jetM[0]) 
-        if event.jetPt.size() > 1: j2_t3.SetPtEtaPhiM(event.jetPt[1], event.jetEta[1], event.jetPhi[1], event.jetM[1]) 
-        if event.jetPt.size() > 2: j3_t3.SetPtEtaPhiM(event.jetPt[2], event.jetEta[2], event.jetPhi[2], event.jetM[2])
-        if event.jetPt.size() > 3: j4_t3.SetPtEtaPhiM(event.jetPt[3], event.jetEta[3], event.jetPhi[3], event.jetM[3])
-        if event.jetPt.size() > 4: j5_t3.SetPtEtaPhiM(event.jetPt[4], event.jetEta[4], event.jetPhi[4], event.jetM[4])
-        if event.jetPt.size() > 5: j6_t3.SetPtEtaPhiM(event.jetPt[5], event.jetEta[5], event.jetPhi[5], event.jetM[5])
-        if event.jetPt.size() > 6: j7_t3.SetPtEtaPhiM(event.jetPt[6], event.jetEta[6], event.jetPhi[6], event.jetM[6])
-        if event.jetPt.size() > 7: j8_t3.SetPtEtaPhiM(event.jetPt[7], event.jetEta[7], event.jetPhi[7], event.jetM[7])
-
-        if event.jetPt.size() == 0:
-            jetSum.SetPtEtaPhiM(0.0, 0.0, 0.0, 0.0)
-            #print('No jets in event')
-        elif event.jetPt.size() == 1:
-            jetSum = j1_t3
-        elif event.jetPt.size() == 2:
-            jetSum = j1_t3 + j2_t3
-        elif event.jetPt.size() == 3:
-            jetSum = j1_t3 + j2_t3 + j3_t3
-        elif event.jetPt.size() == 4:
-            jetSum = j1_t3 + j2_t3 + j3_t3 + j4_t3
-        elif event.jetPt.size() == 5:
-            jetSum = j1_t3 + j2_t3 + j3_t3 + j4_t3 + j5_t3
-        elif event.jetPt.size() == 6:
-            jetSum = j1_t3 + j2_t3 + j3_t3 + j4_t3 + j5_t3 + j6_t3 
-        elif event.jetPt.size() == 7:
-            jetSum = j1_t3 + j2_t3 + j3_t3 + j4_t3 + j5_t3 + j6_t3 + j7_t3 
-        elif event.jetPt.size() >= 8:
-            jetSum = j1_t3 + j2_t3 + j3_t3 + j4_t3 + j5_t3 + j6_t3 + j7_t3 + j8_t3
-        else: print "ERROR: can't calculate jet sum"
-
-        return jetSum
-
-    def getLep1TLVChargeFlavorSignal(self, event):
-        l1_tlv = ROOT.TLorentzVector()
-        l1Charge = 0
-        l1Flavor = 0
-        l1Signal = 0
-        index1, index2 = self.findSignalPairs(event)
-        #print "index1 = %i, index2 = %i" % (index1, index2)
-        #print "l1 charge = %i, l2 charge = %i, l3 charge = %i" % (event.lep1Charge, event.lep2Charge, event.lep3Charge)
-        if (index1 == 1):
-            l1_tlv.SetPtEtaPhiM(event.lep1Pt, event.lep1Eta, event.lep1Phi, event.lep1M)
-            l1Charge = event.lep1Charge
-            l1Flavor = event.lep1Flavor
-            l1Signal = event.lep1Signal
-        elif (index1 == 2):
-            l1_tlv.SetPtEtaPhiM(event.lep2Pt, event.lep2Eta, event.lep2Phi, event.lep2M)
-            l1Charge = event.lep2Charge
-            l1Flavor = event.lep2Flavor
-            l1Signal = event.lep2Signal
-        elif (index1 == 3):
-            l1_tlv.SetPtEtaPhiM(event.lep3Pt, event.lep3Eta, event.lep3Phi, event.lep3M)
-            l1Charge = event.lep3Charge
-            l1Flavor = event.lep3Flavor
-            l1Signal = event.lep3Signal
-        #print "returning l1 charge and type: charge = %i, type = %i" % (l1Charge, l1Flavor)
-        return l1_tlv, l1Charge, l1Flavor, l1Signal
-
-    def getLep2TLVChargeFlavor(self, event):
-        l2_tlv = ROOT.TLorentzVector()
-        index1, index2 = self.findSignalPairs(event)
-        if (index2 == 2):
-            l2_tlv.SetPtEtaPhiM(event.lep2Pt, event.lep2Eta, event.lep2Phi, event.lep2M)
-            l2Charge = event.lep2Charge
-            l2Flavor = event.lep2Flavor
-            l2Signal = event.lep2Signal
-        elif (index2 == 3):
-            l2_tlv.SetPtEtaPhiM(event.lep3Pt, event.lep3Eta, event.lep3Phi, event.lep3M)
-            l2Charge = event.lep3Charge
-            l2Flavor = event.lep3Flavor
-            l2Signal = event.lep3Signal
-        elif (index2 == 4):
-            l2_tlv.SetPtEtaPhiM(event.lep4Pt, event.lep4Eta, event.lep4Phi, event.lep4M)
-            l2Charge = event.lep4Charge
-            l2Flavor = event.lep4Flavor
-            l2Signal = event.lep4Signal
-        return l2_tlv, l2Charge, l2Flavor, l2Signal
-
-    def getLep1TLV(self, event, OSpair):
-        l1_tlv = ROOT.TLorentzVector()
-        if OSpair:
-            index1, index2 = self.findSignalPairs(event)
-            if (index1 == 1):
-                l1_tlv.SetPtEtaPhiM(event.lep1Pt, event.lep1Eta, event.lep1Phi, event.lep1M)
-            elif (index1 == 2):
-                l1_tlv.SetPtEtaPhiM(event.lep2Pt, event.lep2Eta, event.lep2Phi, event.lep2M)
-            elif (index1 == 3):
-                l1_tlv.SetPtEtaPhiM(event.lep3Pt, event.lep3Eta, event.lep3Phi, event.lep3M)
-        else: l1_tlv.SetPtEtaPhiM(event.lep1Pt, event.lep1Eta, event.lep1Phi, event.lep1M)
-        return l1_tlv
-
-    def getLep2TLV(self, event, OSpair):
-        l2_tlv = ROOT.TLorentzVector()
-        if OSpair:
-            index1, index2 = self.findSignalPairs(event)
-            if (index2 == 2):
-                l2_tlv.SetPtEtaPhiM(event.lep2Pt, event.lep2Eta, event.lep2Phi, event.lep2M)
-            elif (index2 == 3):
-                l2_tlv.SetPtEtaPhiM(event.lep3Pt, event.lep3Eta, event.lep3Phi, event.lep3M)
-            elif (index2 == 4):
-                l2_tlv.SetPtEtaPhiM(event.lep4Pt, event.lep4Eta, event.lep4Phi, event.lep4M)
-        else: l2_tlv.SetPtEtaPhiM(event.lep2Pt, event.lep2Eta, event.lep2Phi, event.lep2M)
-        return l2_tlv
-
-    def findC1(self, event):
-        const_1 = 0.
-        l1 = self.getLep1TLV(event, 0)
-        l2 = self.getLep2TLV(event, 0)
-        j  = self.getJetSum(event)
-        numerator = (j.Py()*l2.Px()/l2.Py()) - j.Px()
-        if(l2.Py()): denominator = l1.Px() - (l1.Py()*l2.Px()/l2.Py())
-        if (denominator): const_1 = numerator/denominator
-        return const_1
-
-    def findC2(self, event, f1):
-        const_2 = 0.
-        l1 = self.getLep1TLV(event, 0)
-        l2 = self.getLep2TLV(event, 0)
-        j  = self.getJetSum(event)
-        if(l2.Py()): 
-            const_2 = -(j.Py()/l2.Py()) - f1*(l1.Py()/l2.Py())
-        return const_2
+        self.met = event.met/1000.
+        self.mt = event.mt/1000.
+        self.met_phi = event.met_phi
+        self.HLT_e5 = event.HLT_e5_lhvloose
+        self.HLT_e10 = event.HLT_e10_lhvloose_L1EM7
+        self.HLT_e15 = event.HLT_e15_lhvloose_L1EM13VH
+        self.HLT_e20 = event.HLT_e20_lhvloose
+        self.n_baseel = event.n_baseel
+        self.baseel_idTight = event.baseel_idTight
+        self.baseel_isoTight = event.baseel_isoTight
+        self.baseel_d0sig = event.baseel_d0sig
+        self.baseel_z0sinTheta = event.baseel_z0sinTheta
+        self.baseel_pt = event.baseel_pt 
+        self.baseel_eta = event.baseel_eta 
+        self.baseel_phi = event.baseel_phi
+        if isdata == '':
+            self.xs_weight = event.xs_weight
+            self.mc_event_weight = event.mc_event_weight
+            self.pileup_weight = event.pileup_weight
 
 
-    def calcMtautau(self, event):
-        new_tlv1 = self.getLep1TLV(event, 0)
-        new_tlv2 = self.getLep2TLV(event, 0)
-        old_tlv1 = self.getLep1TLV(event, 0)
-        old_tlv2 = self.getLep2TLV(event, 0)
-        old_spacial1 = old_tlv1.Vect() 
-        old_spacial2 = old_tlv2.Vect() 
-        new_spacial1 = old_tlv1.Vect() 
-        new_spacial2 = old_tlv2.Vect() 
-        f1 = self.findC1(event)
-        f2 = self.findC2(event, f1)
-        new_spacial1.SetMag(old_spacial1.Mag()*f1)
-        new_spacial2.SetMag(old_spacial2.Mag()*f2)
-        if (f1 > 0.): new_tlv1.SetVectM(new_spacial1, old_tlv1.M()) 
-        else: new_tlv1.SetVectM(new_spacial1, (-1)*old_tlv1.M())
-        if (f2 > 0.): new_tlv2.SetVectM(new_spacial2, old_tlv2.M())
-        else: new_tlv2.SetVectM(new_spacial2, (-1)*old_tlv2.M())
-        lepSum_old = old_tlv1+old_tlv2
-        lepSum_new = new_tlv1+new_tlv2
-        if( new_tlv1.M() + new_tlv2.M() < 0. ):
-            new_mass = (-1)*lepSum_new.M()
-        else: new_mass = lepSum_new.M()
-        return new_mass
+    def getMET(self):
+        met = self.met
+        return met
 
-    def findBasePairs(self, event):
-        Qlep1 = event.lep1Charge
-        Qlep2 = event.lep2Charge
-        Qlep3 = event.lep3Charge
-        Qlep4 = event.lep4Charge
-        Tlep1 = event.lep1Flavor
-        Tlep2 = event.lep2Flavor
-        Tlep3 = event.lep3Flavor
-        Tlep4 = event.lep4Flavor
-        index1 = 0
-        index2 = 0
-        if ( Qlep1*Qlep2 == -1):
-            index1 = 1
-            index2 = 2
-        elif (Qlep1*Qlep3 == -1):
-            index1 = 1
-            index2 = 3
-        elif (Qlep2*Qlep3 == -1):
-            index1 = 2
-            index2 = 3
-        elif (Qlep1*Qlep4 == -1):
-            index1 = 1
-            index2 = 4
-        elif (Qlep2*Qlep4 == -1):
-            index1 = 2
-            index2 = 4
-        elif (Qlep3*Qlep4 == -1):
-            index1 = 3
-            index2 = 4
-        else: 
-            index1 = 1
-            index2 = 2
-        return index1, index2
-    def findSignalPairs(self, event):
-        if event.lep1Signal:
-            Qlep1 = event.lep1Charge
-        else: Qlep1 = 0
-        if event.lep2Signal:
-            Qlep2 = event.lep2Charge
-        else: Qlep2 = 0
-        if event.lep3Signal:
-            Qlep3 = event.lep3Charge
-        else: Qlep3 = 0
-        if event.lep4Signal:
-            Qlep4 = event.lep4Charge
-        else: Qlep4 = 0
-        Tlep1 = event.lep1Flavor
-        Tlep2 = event.lep2Flavor
-        Tlep3 = event.lep3Flavor
-        Tlep4 = event.lep4Flavor
-        index1 = 0
-        index2 = 0
-        if ( Qlep1*Qlep2 == -1):
-            index1 = 1
-            index2 = 2
-        elif (Qlep1*Qlep3 == -1):
-            index1 = 1
-            index2 = 3
-        elif (Qlep2*Qlep3 == -1):
-            index1 = 2
-            index2 = 3
-        elif (Qlep1*Qlep4 == -1):
-            index1 = 1
-            index2 = 4
-        elif (Qlep2*Qlep4 == -1):
-            index1 = 2
-            index2 = 4
-        elif (Qlep3*Qlep4 == -1):
-            index1 = 3
-            index2 = 4
-        else: 
-            index1 = 1
-            index2 = 2
-        return index1, index2
+    #def getMT(self, lep1Vec):
+    #    mt = self.mt
+    #    return mt
+    def getMT(self, lep1Vec):
+        met = self.met
+        #mt = event.mt/1000.
+        #if( self.getDphiL1MET(lep1Vec.Phi()) > -99. ):
+        mt = TMath.Sqrt(2*lep1Vec.Pt()*met*(1-TMath.Cos(self.getDphiL1MET(lep1Vec.Phi()))))
+        return mt
+
+    def getDphiL1MET(self, l1phi):
+        dphi_l1met = -99.
+        met_phi = self.met_phi
+        if l1phi:
+            dphi_l1met = TVector2.Phi_mpi_pi(l1phi - met_phi)
+        return dphi_l1met
+
+
+    def getTriggers(self):
+        HLT_e5 = self.HLT_e5
+        HLT_e10 = self.HLT_e10
+        HLT_e15 = self.HLT_e15
+        HLT_e20 = self.HLT_e20
+        return HLT_e5, HLT_e10, HLT_e15, HLT_e20
+
+    def getNBaseel(self):
+        n_baseel = self.n_baseel
+        return n_baseel
+
+    def getIDelectronVec(self):
+        IDelectronList = []
+        IDelectronVec = ROOT.TVector3() 
+        for x in xrange(self.n_baseel):
+            if( self.baseel_idTight[x] == 1 and self.baseel_isoTight[x] == 1 and abs(self.baseel_d0sig[x]) < 5. and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+               IDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+               #print "ID GOOD!"
+               #print IDelectronVec.Pt(), IDelectronVec.Eta(), IDelectronVec.Phi()
+               IDelectronList.append(IDelectronVec)
+        #print "ID BAD!"
+        #print IDelectronVec.Pt(), IDelectronVec.Eta(), IDelectronVec.Phi()
+        return IDelectronVec
+
+    def getAntiIDelectronVec(self):
+        AIDelectronList = []
+        AIDelectronVec = ROOT.TVector3()
+        for x in xrange(self.getNBaseel()):
+            if( self.baseel_idTight[x] == 0 or self.baseel_isoTight[x] == 0 or abs(self.baseel_d0sig[x]) >= 5. or abs(self.baseel_z0sinTheta[x]) >= 0.5 ):
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                #print "ANTI-ID GOOD!"
+                #print AIDelectronVec.Pt(), AIDelectronVec.Eta(), AIDelectronVec.Phi()
+                AIDelectronList.append(AIDelectronVec)
+        #print "ANTI-ID BAD!"
+        #print AIDelectronVec.Pt(), AIDelectronVec.Eta(), AIDelectronVec.Phi()
+        print AIDelectronList
+        return AIDelectronVec
+
+
+    def getWeights(self):
+        xs_weight = self.xs_weight
+        mc_event_weight = self.mc_event_weight
+        pileup_weight = self.pileup_weight
+        return xs_weight, mc_event_weight, pileup_weight
+
+
+
+
+
 
         
