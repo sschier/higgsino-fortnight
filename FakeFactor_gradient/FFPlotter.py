@@ -325,6 +325,8 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
     if debug: print "Setting variable to plot"
     var = variable
     path = sample_path
+    value_list = []
+    error_list = []
     if debug: print "Getting MC list"
     BGhist_list = GetBGHists(GetRootFiles(indir, debug), path, debug)
     if debug: print "Getting data hist"
@@ -334,8 +336,6 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
     m_hstack = MakeHistStack(BGhist_list, lumi,  debug)
     m_hsum = SumMCHists(BGhist_list, lumi, debug)
     print '*********** %s electron ***********' % region
-    sum0 = 0.0
-    err0 = 0.0
     sum1 = 0.0
     err1 = 0.0
     sum2 = 0.0
@@ -347,8 +347,8 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
         bkSubtract_error = m_data.GetBinError(x) - m_hsum.GetBinError(x)
         #print ' bin %i = %f' % (x, bkSubtract)
         if( x > 5 and x <= 10 ):
-            sum0 += bkSubtract
-            err0 += bkSubtract_error
+            value_list.append(bkSubtract)
+            error_list.append(bkSubtract_error)
         elif( x > 10 and x <= 15 ):
             sum1 += bkSubtract
             err1 += bkSubtract_error
@@ -359,8 +359,12 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
             sum3 += bkSubtract
             err3 += bkSubtract_error
     
-    value_list = [sum0, sum1, sum2, sum3]
-    error_list = [err0, err1, err2, err3]
+    value_list.append(sum1)
+    error_list.append(err1)
+    value_list.append(sum2)
+    error_list.append(err2)
+    value_list.append(sum3)
+    error_list.append(err3)
     print value_list
     print error_list
                 
@@ -396,8 +400,10 @@ def renorm(lumi, path, region, var, indir, debug):
     m_hsum = SumMCHists(BGhist_list, lumi, debug)
     error_d = ROOT.Double()
     error_m = ROOT.Double()
-    integral_d = m_data.IntegralAndError(11, 20, error_d)
-    integral_m = m_hsum.IntegralAndError(11, 20, error_m)
+    #integral_d = m_data.IntegralAndError(11, 20, error_d)
+    #integral_m = m_hsum.IntegralAndError(11, 20, error_m)
+    integral_d = m_data.IntegralAndError(13, 20, error_d)
+    integral_m = m_hsum.IntegralAndError(13, 20, error_m)
 
     renorm, error = divideAndError(integral_d, error_d, integral_m, error_m)
     print "normalization factor for %s = %f +- %f" %(region, renorm, error)
@@ -414,8 +420,6 @@ def main(argv):
     args=parser.parse_args()
 
     print "Congratulations!"
-    FFs = []
-    FF_err = []
     var_list = []
     variables = ['Mt', 'MET',  'AntiIDelPt']
     variables1 = ['Mt', 'MET', 'IDelPt']
@@ -446,9 +450,10 @@ def main(argv):
 
     FFs, FF_err = divideAndErrors(num_list, num_error, denom_list, denom_error)
 
+
     if args.test:
         print "Done"
 
 if __name__ == '__main__':
     main(sys.argv[1:])
- #======================================================================
+ #]======================================================================

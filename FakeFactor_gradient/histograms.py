@@ -45,7 +45,7 @@ class antiidhists:
         for i,k in self.collections.iteritems():
             if i in coll.collections: k.add(coll.collections[i])
 
-    def fill(self, obs, elVec, elZ0, elD0):
+    def fill(self, obs, elVec, elZ0, elD0, variation):
         intLumi = 1.0
         met = obs.getMET()
         mt =  obs.getMT(elVec)
@@ -58,12 +58,9 @@ class antiidhists:
         triggers['HLT_e15'] = HLT_e15
         triggers['HLT_e20'] = HLT_e20
         #electron variables
-        #AntiIDpt = ROOT.TLorentzVector()
         AntiIDpt = elVec.Pt()
-        AntiIDphi = elVec.Phi()
-        AntiIDeta = elVec.Eta()
-        #leptons
         n_baseel = obs.getNBaseel()
+
 
         #Calculate trigger weight
         norm = renorm(obs)
@@ -73,11 +70,14 @@ class antiidhists:
         if self.isdata:
             #print "getting trigger prescales"
             totalWeight = norm.getTriggerWeights(self.isdata, AntiIDpt, triggers)
-            print 'Anti ID total weight = %f' % totalWeight
+            #print 'Anti ID total weight = %f' % totalWeight
         else:
-            xs_weight, mc_event_weight, pileup_weight, sf_total = obs.getWeights()
-            totalWeight = float(xs_weight*mc_event_weight*sf_total) #TODO: NO TRIGGER WEIGHT!!
-            #totalWeight = float(xs_weight*mc_event_weight) #TODO: NO TRIGGER WEIGHT!!
+            xs_weight, mc_event_weight, sf_el, sf_jvt, sf_btag, pileup_weight = obs.getWeights()
+            if( variation == 'pileup' ):
+                #print "including pileup in weight"
+                totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag*pileup_weight) #for pileup systematic
+            else:
+                totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag)
 
         self.hists["AntiIDelPt"].Fill(float(AntiIDpt), totalWeight)
         self.hists["Mt"].Fill(float(mt), totalWeight)
@@ -122,7 +122,7 @@ class idhists:
         for i,k in self.collections.iteritems():
             if i in coll.collections: k.add(coll.collections[i])
 
-    def fill(self, obs, elVec, elZ0, elD0):
+    def fill(self, obs, elVec, elZ0, elD0, variation):
         intLumi = 1.0
         met = obs.getMET()
         mt =  obs.getMT(elVec)
@@ -144,12 +144,16 @@ class idhists:
 
         #Calculating weight
         if self.isdata:
-            print "getting trigger prescales"
+            #print "getting trigger prescales"
             totalWeight = norm.getTriggerWeights(self.isdata, IDpt, triggers)
-            print 'ID total weight = %f' % totalWeight
+            #print 'ID total weight = %f' % totalWeight
         else:
-            xs_weight, mc_event_weight, pileup_weight, sf_total = obs.getWeights()
-            totalWeight = float(xs_weight*mc_event_weight*sf_total) #TODO: NO TRIGGER WEIGHT!!
+            xs_weight, mc_event_weight, sf_el, sf_jvt, sf_btag, pileup_weight = obs.getWeights()
+            if( variation == 'pileup' ):
+                #print "including pileup in weight"
+                totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag*pileup_weight) #for pileup systematic
+            else:
+                totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag)
 
         self.hists["IDelPt"].Fill(float(IDpt), totalWeight)
         self.hists["Mt"].Fill(float(mt), totalWeight)
@@ -193,7 +197,7 @@ class fakehists:
         for i,k in self.collections.iteritems():
             if i in coll.collections: k.add(coll.collections[i])
 
-    def fill(self, obs, elVec, nLep):
+    def fill(self, obs, elVec, nLep, variation):
         intLumi = 1.0
         met = obs.getMET()
         triggers = {}
@@ -215,8 +219,12 @@ class fakehists:
             #print "getting trigger prescales"
             totalWeight = norm.getTriggerWeights(self.isdata, IDpt, triggers)
         else:
-            xs_weight, mc_event_weight, pileup_weight = obs.getWeights()
-            totalWeight = float(xs_weight*mc_event_weight*sf_total) #TODO: NO TRIGGER WEIGHT!!
+            xs_weight, mc_event_weight, sf_el, sf_jvt, sf_btag, pileup_weight = obs.getWeights()
+            if( variation == 'pileup' ):
+                #print "including pileup in weight"
+                totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag*pileup_weight) #for pileup systematic
+            else:
+                totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag)
 
         self.hists["n_el"].Fill(float(n_IDel), totalWeight)
         self.hists["Met"].Fill(float(met), totalWeight)
@@ -268,22 +276,22 @@ class histcollection:
         for i,k in self.collections.iteritems():
             if i in coll: k.add(coll[i])
 
-    def fillN(self, event, elVec, nlep):
+    def fillN(self, event, elVec, nlep, variation):
         for i,k in self.collections.iteritems():
-            k.fill(event, elVec, nlep)
+            k.fill(event, elVec, nlep, variation)
 
-    def fillN(self, event, tag, elVec, nlep):
+    def fillN(self, event, tag, elVec, nlep, variation):
         for i,k in self.collections.iteritems():
             if i==tag:
-                k.fill(event, elVec, nlep)
+                k.fill(event, elVec, nlep, variation)
                 break
 
-    def fill(self, event, elVec, Z0, D0):
+    def fill(self, event, elVec, Z0, D0, variation):
         for i,k in self.collections.iteritems():
-            k.fill(event, elVec, Z0, D0)
+            k.fill(event, elVec, Z0, D0, variation)
 
-    def fill(self, event, tag, elVec, Z0, D0):
+    def fill(self, event, tag, elVec, Z0, D0, variation):
         for i,k in self.collections.iteritems():
             if i==tag:
-                k.fill(event, elVec, Z0, D0)
+                k.fill(event, elVec, Z0, D0, variation)
                 break

@@ -16,63 +16,63 @@ from histograms import *
 from observables import *
 from cuts import *
 from renormalize import *
-from functions import *
+
 
 #======================================================================
-def FFIDSR(event, hc, IDCuts, elList, Z0list, D0list, debug):
+def FFIDSR(event, hc, IDCuts, elList, Z0list, D0list, variation):
     nlep = len(elList)
     nlep_fill = 0
     nlepSR_fill = 0
     for CutsDict, el, z0, d0 in zip(IDCuts, elList, Z0list, D0list):
         if(CutsDict["HLT_e5"]):
-            hc.fill(event, "HLTe5", el, z0, d0)
+            hc.fill(event, "HLTe5", el, z0, d0, variation)
         if(CutsDict["HLT_e10"]):
-            hc.fill(event, "HLTe10", el, z0, d0)
+            hc.fill(event, "HLTe10", el, z0, d0, variation)
         if(CutsDict["HLT_e15"]):
-            hc.fill(event, "HLTe15", el, z0, d0)
+            hc.fill(event, "HLTe15", el, z0, d0, variation)
         if(CutsDict["HLT_e20"] ):
-            hc.fill(event, "HLTe20", el, z0, d0)
-        if( ((CutsDict["HLT_e5"] and CutsDict["idel5"]) or (CutsDict["HLT_e10"] and CutsDict["idel10"]) or (CutsDict["HLT_e15"] and CutsDict["idel15"]) or (CutsDict["HLT_e20"] and CutsDict["idel20"])) ):
-            if debug: print "filling ID lep w/ Pt %f" % el.Pt()
+            hc.fill(event, "HLTe20", el, z0, d0, variation)
+        if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            #print "filling ID lep w/ Pt %f" % el.Pt()
             nlep_fill += 1
-            hc.fill(event, "FFID", el, z0, d0)
-            if( CutsDict["40mtID"] ):
+            hc.fill(event, "FFID", el, z0, d0, variation)
+            if( CutsDict["40mt"] ):
                 nlepSR_fill += 1
-                hc.fill(event, "FFIDSR", el, z0, d0)
+                hc.fill(event, "FFIDSR", el, z0, d0, variation)
     #if len(elList):
-    #    hc.fillN(event, "FFIDN", elList[0], nlep)
-    #    hc.fillN(event, "FFIDNfill", elList[0], nlep_fill)
-    #    hc.fillN(event, "FFIDSRNfill", elList[0], nlepSR_fill)
+    #    hc.fillN(event, "FFIDN", elList[0], nlep, variation)
+    #    hc.fillN(event, "FFIDNfill", elList[0], nlep_fill, variation)
+    #    hc.fillN(event, "FFIDSRNfill", elList[0], nlepSR_fill, variation)
     return True
 #======================================================================
-def FFAIDSR(event, hc, AIDCuts, elList, Z0list, D0list, debug):
+def FFAIDSR(event, hc, AIDCuts, elList, Z0list, D0list, variation):
     nlep = len(elList)
     nlep_fill = 0
     nlepSR_fill = 0
     for CutsDict, el, z0, d0 in zip(AIDCuts, elList, Z0list, D0list):
         if(CutsDict["HLT_e5"]):
-            hc.fill(event, "HLTe5", el, z0, d0)
+            hc.fill(event, "HLTe5", el, z0, d0, variation)
         if(CutsDict["HLT_e10"]):
-            hc.fill(event, "HLTe10", el, z0, d0)
+            hc.fill(event, "HLTe10", el, z0, d0, variation)
         if(CutsDict["HLT_e15"]):
-            hc.fill(event, "HLTe15", el, z0, d0)
-        if(CutsDict["HLT_e20"]):
-            hc.fill(event, "HLTe20", el, z0, d0)
-        if( ((CutsDict["HLT_e5"] and CutsDict["antiidel5"]) or (CutsDict["HLT_e10"] and CutsDict["antiidel10"]) or (CutsDict["HLT_e15"] and CutsDict["antiidel15"]) or (CutsDict["HLT_e20"] and CutsDict["antiidel20"])) ):
-            if debug: print "filling Anti ID lep w/ Pt %f" % el.Pt()
+            hc.fill(event, "HLTe15", el, z0, d0, variation)
+        if(CutsDict["HLT_e20"] ):
+            hc.fill(event, "HLTe20", el, z0, d0, variation)
+        if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            #print "filling Anti ID lep w/ Pt %f" % el.Pt()
             nlep_fill += 1
-            hc.fill(event, "FFAID", el, z0, d0)
-            if( CutsDict["40mtAID"] ):
+            hc.fill(event, "FFAID", el, z0, d0, variation)
+            if( CutsDict["40mt"] ):
                 nlepSR_fill += 1
-                hc.fill(event, "FFAIDSR", el, z0, d0)
+                hc.fill(event, "FFAIDSR", el, z0, d0, variation)
     #if len(elList):
-    #    hc.fillN(event, "FFAIDN", elList[0], nlep)
-    #    hc.fillN(event, "FFAIDNfill", elList[0], nlep_fill)
-    #    hc.fillN(event, "FFAIDSRNfill", elList[0], nlepSR_fill)
+    #    hc.fillN(event, "FFAIDN", elList[0], nlep, variation)
+    #    hc.fillN(event, "FFAIDNfill", elList[0], nlep_fill, variation)
+    #    hc.fillN(event, "FFAIDSRNfill", elList[0], nlepSR_fill, variation)
     return True
 #======================================================================
 #
-def analyze(infile, tree, data, signal, outfile, debug, region):
+def analyze(infile, tree, data, signal, outfile, debug, region, variation):
 
     if debug: print "opening input file"
 
@@ -96,7 +96,7 @@ def analyze(infile, tree, data, signal, outfile, debug, region):
 
     if debug: print "..making histograms collections"
 
-    IDSR=histcollection("FFIDSR", o, debug, data, tree, 0)
+    IDSR=histcollection("FFIDSR", o, 0, data, tree, 0)
     IDSR.addfakecollection("FFIDN")
     IDSR.addfakecollection("FFIDNfill")
     IDSR.addfakecollection("FFIDSRNfill")
@@ -107,7 +107,7 @@ def analyze(infile, tree, data, signal, outfile, debug, region):
     IDSR.addidcollection("HLTe15")
     IDSR.addidcollection("HLTe20")
 
-    AIDSR=histcollection("FFAIDSR", o, debug, data, tree, 0)
+    AIDSR=histcollection("FFAIDSR", o, 0, data, tree, 0)
     AIDSR.addfakecollection("FFAIDN")
     AIDSR.addfakecollection("FFAIDNfill")
     AIDSR.addfakecollection("FFAIDSRNfill")
@@ -132,7 +132,7 @@ def analyze(infile, tree, data, signal, outfile, debug, region):
         #______________________
 
         eventcount +=1
-        if debug: print "event %i" % eventcount
+        #print "event %i" % eventcount
 
         #----------------------------
         #define preliminary variables
@@ -141,12 +141,11 @@ def analyze(infile, tree, data, signal, outfile, debug, region):
         #qcd cut variables
 
         obs = observable(event, data)
-        IDelectronlist, IDelectronZ0sinT, IDelectronD0sig = obs.getSigElectrons()
-        if debug: print "%i signal electrons" % len(IDelectronlist)
-        AIDelectronlist, AIDelectronZ0sinT, AIDelectronD0sig = obs.getAntiIDelectrons(IDelectronlist, debug)
+        IDelectronlist, IDelectronZ0sinT, IDelectronD0sig = obs.getIDelectrons()
+        AIDelectronlist, AIDelectronZ0sinT, AIDelectronD0sig = obs.getAntiIDelectrons()
         cutdict = cuts(obs) 
-        IDCuts = cutdict.getIDCuts(IDelectronlist)
-        AIDCuts = cutdict.getAIDCuts(AIDelectronlist)
+        IDCuts = cutdict.getCuts(IDelectronlist)
+        AIDCuts = cutdict.getCuts(AIDelectronlist)
 
         triggers = {}
         HLT_e5, HLT_e10, HLT_e15, HLT_e20 = obs.getTriggers()
@@ -155,7 +154,7 @@ def analyze(infile, tree, data, signal, outfile, debug, region):
         triggers['HLT_e15'] = HLT_e15
         triggers['HLT_e20'] = HLT_e20
 
-        if debug: print triggers
+        #print triggers
 
         #print out event status
         if (eventcount%1000 == 0): print "%i events analyzed" % eventcount
@@ -167,8 +166,8 @@ def analyze(infile, tree, data, signal, outfile, debug, region):
         #------------------------------
         #trigger efficiency regions
         #------------------------------
-        FFIDSR( obs,  IDSR,  IDCuts, IDelectronlist, IDelectronZ0sinT, IDelectronD0sig, debug)
-        FFAIDSR(obs,  AIDSR, AIDCuts, AIDelectronlist, AIDelectronZ0sinT, AIDelectronD0sig, debug)
+        FFIDSR( obs,  IDSR,  IDCuts, IDelectronlist, IDelectronZ0sinT, IDelectronD0sig, variation)
+        FFAIDSR(obs,  AIDSR, AIDCuts, AIDelectronlist, AIDelectronZ0sinT, AIDelectronD0sig, variation)
 
 
     print '%i total events' % eventcount
@@ -186,7 +185,7 @@ def main(argv):
 
     parser = argparse.ArgumentParser(description="Command line arguments")
     parser.add_argument("--input"      , action='store', default='', help='input root file containing tree to loop over')
-    #parser.add_argument("--weight"      , action='store', default='', help='root file containing sum of weights hist')
+    parser.add_argument("-variation"   , action='store', default='', help='set for a systematic varaiation')
     parser.add_argument("--tree"        , action='store', default='')
     parser.add_argument("--isData"      , action='store', default='')
     parser.add_argument("--isSignal"    , action='store_true')
@@ -198,7 +197,7 @@ def main(argv):
 
     print "Starting Analysis"
 
-    analyze(args.input,  args.tree, args.isData, args.isSignal, args.outfile, args.test, args.region)   
+    analyze(args.input,  args.tree, args.isData, args.isSignal, args.outfile, args.test, args.region, args.variation)   
 
     print "Done"
 

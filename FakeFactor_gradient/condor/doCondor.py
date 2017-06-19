@@ -7,7 +7,7 @@ import time, datetime
 exe = '../FFMaker.py'
 ts = time.time()
 st = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d%H%M')
-base_dir = '/export/share/data/sschier/FakeLepton/el_trigger_skims/'
+base_dir = '/export/share/data/sschier/FakeLepton/trigger_skims/'
 
 arg_template = ' --input=%s --tree=ttbar --outfile=outputHist_ttbar.root'
 input_files = glob.glob(base_dir+'ttbar_skim/*')
