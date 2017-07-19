@@ -22,10 +22,14 @@ class antiidhists:
         self.newdir.cd()
 
         self.hists['AntiIDelPt']=ROOT.TH1F("h_"+tag+"_AntiIDelPt",tag+"_AntiIDelPt; AntiID electron p_{T} [GeV]; Events",100, 0, 100)
-        self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
+        #xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 125., 150., 175., 200., 250., 300., 400., 600.]
+        xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 150., 200., 300., 400., 600.]
+        self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)", 15, array('d',xbins))
+        #self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
         self.hists['Mt']=ROOT.TH1F("h_"+tag+"_Mt",tag+"_Mt; m_{T} [GeV]; Events/(10 GeV) ",20, 0, 200)
         self.hists['Z0SinTheta']=ROOT.TH1F("h_"+tag+"_Z0sinT",tag+"_Z0sinT; Z_{0}sin(#theta) [mm]; Events/(0.25mm) ",20, 0, 5)
         self.hists['D0Sig']=ROOT.TH1F("h_"+tag+"_D0sig",tag+"_D0sig; D_{0}sig; Events/(0.2) ",50, 0, 10)
+        self.hists['AntiIDelEta']=ROOT.TH1F("h_"+tag+"_AntiIDelEta", tag+"_AntiIDelEta; AntiID electron #eta; Events/0.1",25, 0, 2.5)
 
         topdir.cd()
         self.collections={}
@@ -59,6 +63,7 @@ class antiidhists:
         triggers['HLT_e20'] = HLT_e20
         #electron variables
         AntiIDpt = elVec.Pt()
+        AntiIDeta = elVec.Eta()
         n_baseel = obs.getNBaseel()
 
 
@@ -84,6 +89,7 @@ class antiidhists:
         self.hists["Met"].Fill(float(met), totalWeight)
         self.hists["Z0SinTheta"].Fill(float(abs(elZ0)), totalWeight)
         self.hists["D0Sig"].Fill(float(abs(elD0)), totalWeight)
+        self.hists['AntiIDelEta'].Fill(float(AntiIDeta), totalWeight)
 
 
 #------------------------------------------------------------------
@@ -99,10 +105,14 @@ class idhists:
         self.newdir.cd()
 
         self.hists['IDelPt']=ROOT.TH1F("h_"+tag+"_IDelPt",tag+"_IDelPt; ID electron p_{T} [GeV]; Events",100, 0, 100)
-        self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
+        #xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 125., 150., 175., 200., 250., 300., 400., 600.]
+        xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 150., 200., 300., 400., 600.]
+        self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)", 15, array('d',xbins))
+        #self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
         self.hists['Mt']=ROOT.TH1F("h_"+tag+"_Mt",tag+"_Mt; m_{T} [GeV]; Events/(10 GeV) ",20, 0, 200)
         self.hists['Z0SinTheta']=ROOT.TH1F("h_"+tag+"_Z0sinT",tag+"_Z0sinT; Z_{0}sin(#theta) [mm]; Events/(0.25mm) ",20, 0, 5)
         self.hists['D0Sig']=ROOT.TH1F("h_"+tag+"_D0sig",tag+"_D0sig; D_{0}sig; Events/(0.2) ",50, 0, 10)
+        self.hists['IDelEta']=ROOT.TH1F("h_"+tag+"_IDelEta", tag+"_IDelEta; ID electron  #eta; Events/0.1",25, 0, 2.5)
 
         topdir.cd()
         self.collections={}
@@ -136,6 +146,7 @@ class idhists:
         triggers['HLT_e20'] = HLT_e20
         #electron variables
         IDpt     = elVec.Pt()
+        IDeta    = elVec.Eta()
         n_baseel = obs.getNBaseel()
 
 
@@ -160,6 +171,7 @@ class idhists:
         self.hists["Met"].Fill(float(met), totalWeight)
         self.hists["Z0SinTheta"].Fill(float(abs(elZ0)), totalWeight)
         self.hists["D0Sig"].Fill(float(abs(elD0)), totalWeight)
+        self.hists['IDelEta'].Fill(float(IDeta), totalWeight)
 
 
 #------------------------------------------------------------------
@@ -174,10 +186,11 @@ class fakehists:
         self.newdir=topdir.mkdir(tag)
         self.newdir.cd()
 
-        xbins = [0., 5., 10., 15., 20., 100.]
 
         self.hists['n_el']=ROOT.TH1F("h_"+tag+"_n_el",tag+"_n_el; n el; Events ", 4, 0, 4)
-        self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
+        xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 125., 150., 175., 200., 250., 300., 400., 600.]
+        self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)", 18, array('d',xbins))
+        #self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
 
         topdir.cd()
         self.collections={}

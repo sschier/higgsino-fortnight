@@ -5,7 +5,7 @@
 
 
 import sys, os, subprocess, getopt
-import re, time, copy, math, array
+import re, time, copy, math
 import argparse, commands
 import ROOT
 from ROOT import TString
@@ -118,6 +118,72 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
     AIDSR.addantiidcollection("HLTe15")
     AIDSR.addantiidcollection("HLTe20")
 
+    AID1=histcollection("AID1", o, 0, data, tree, 0)
+    AID1.addfakecollection("FFAIDN")
+    AID1.addfakecollection("FFAIDNfill")
+    AID1.addfakecollection("FFAIDSRNfill")
+    AID1.addantiidcollection("FFAID")
+    AID1.addantiidcollection("FFAIDSR")
+    AID1.addantiidcollection("HLTe5")
+    AID1.addantiidcollection("HLTe10")
+    AID1.addantiidcollection("HLTe15")
+    AID1.addantiidcollection("HLTe20")
+
+    AID2=histcollection("AID2", o, 0, data, tree, 0)
+    AID2.addfakecollection("FFAIDN")
+    AID2.addfakecollection("FFAIDNfill")
+    AID2.addfakecollection("FFAIDSRNfill")
+    AID2.addantiidcollection("FFAID")
+    AID2.addantiidcollection("FFAIDSR")
+    AID2.addantiidcollection("HLTe5")
+    AID2.addantiidcollection("HLTe10")
+    AID2.addantiidcollection("HLTe15")
+    AID2.addantiidcollection("HLTe20")
+
+    AID3=histcollection("AID3", o, 0, data, tree, 0)
+    AID3.addfakecollection("FFAIDN")
+    AID3.addfakecollection("FFAIDNfill")
+    AID3.addfakecollection("FFAIDSRNfill")
+    AID3.addantiidcollection("FFAID")
+    AID3.addantiidcollection("FFAIDSR")
+    AID3.addantiidcollection("HLTe5")
+    AID3.addantiidcollection("HLTe10")
+    AID3.addantiidcollection("HLTe15")
+    AID3.addantiidcollection("HLTe20")
+
+    AID13=histcollection("AID13", o, 0, data, tree, 0)
+    AID13.addfakecollection("FFAIDN")
+    AID13.addfakecollection("FFAIDNfill")
+    AID13.addfakecollection("FFAIDSRNfill")
+    AID13.addantiidcollection("FFAID")
+    AID13.addantiidcollection("FFAIDSR")
+    AID13.addantiidcollection("HLTe5")
+    AID13.addantiidcollection("HLTe10")
+    AID13.addantiidcollection("HLTe15")
+    AID13.addantiidcollection("HLTe20")
+
+    AID12=histcollection("AID12", o, 0, data, tree, 0)
+    AID12.addfakecollection("FFAIDN")
+    AID12.addfakecollection("FFAIDNfill")
+    AID12.addfakecollection("FFAIDSRNfill")
+    AID12.addantiidcollection("FFAID")
+    AID12.addantiidcollection("FFAIDSR")
+    AID12.addantiidcollection("HLTe5")
+    AID12.addantiidcollection("HLTe10")
+    AID12.addantiidcollection("HLTe15")
+    AID12.addantiidcollection("HLTe20")
+
+    AID23=histcollection("AID23", o, 0, data, tree, 0)
+    AID23.addfakecollection("FFAIDN")
+    AID23.addfakecollection("FFAIDNfill")
+    AID23.addfakecollection("FFAIDSRNfill")
+    AID23.addantiidcollection("FFAID")
+    AID23.addantiidcollection("FFAIDSR")
+    AID23.addantiidcollection("HLTe5")
+    AID23.addantiidcollection("HLTe10")
+    AID23.addantiidcollection("HLTe15")
+    AID23.addantiidcollection("HLTe20")
+
     eventcount = 0
 
     #-------------------------
@@ -141,11 +207,24 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
         #qcd cut variables
 
         obs = observable(event, data)
-        IDelectronlist, IDelectronZ0sinT, IDelectronD0sig = obs.getIDelectrons()
-        AIDelectronlist, AIDelectronZ0sinT, AIDelectronD0sig = obs.getAntiIDelectrons()
+        IDelectronlist,           IDelectronZ0sinT,           IDelectronD0sig = obs.getIDelectrons()
+        AIDelectronlist,          AIDelectronZ0sinT,          AIDelectronD0sig = obs.getAntiIDelectrons()
+        failID_electronlist,      failID_electronZ0sinT,      failID_electronD0sig = obs.getAntiIDelectrons1()
+        failISO_electronlist,     failISO_electronZ0sinT,     failISO_electronD0sig = obs.getAntiIDelectrons2()
+        failD0_electronlist,      failD0_electronZ0sinT,      failD0_electronD0sig = obs.getAntiIDelectrons3()
+        failID_ISO_electronlist,  failID_ISO_electronZ0sinT,  failID_ISO_electronD0sig = obs.getAntiIDelectrons12()
+        failID_D0_electronlist,   failID_D0_electronZ0sinT,   failID_D0_electronD0sig = obs.getAntiIDelectrons13()
+        failISO_D0_electronlist,  failISO_D0_electronZ0sinT,  failISO_D0_electronD0sig = obs.getAntiIDelectrons23()
         cutdict = cuts(obs) 
         IDCuts = cutdict.getCuts(IDelectronlist)
         AIDCuts = cutdict.getCuts(AIDelectronlist)
+        failIDCuts = cutdict.getCuts(failID_electronlist)
+        failISOCuts = cutdict.getCuts(failISO_electronlist)
+        failD0Cuts = cutdict.getCuts(failD0_electronlist)
+        failID_ISOCuts = cutdict.getCuts(failID_ISO_electronlist)
+        failID_D0Cuts = cutdict.getCuts(failID_D0_electronlist)
+        failISO_D0Cuts = cutdict.getCuts(failISO_D0_electronlist)
+        print failID_electronlist
 
         triggers = {}
         HLT_e5, HLT_e10, HLT_e15, HLT_e20 = obs.getTriggers()
@@ -166,8 +245,14 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
         #------------------------------
         #trigger efficiency regions
         #------------------------------
-        FFIDSR( obs,  IDSR,  IDCuts, IDelectronlist, IDelectronZ0sinT, IDelectronD0sig, variation)
-        FFAIDSR(obs,  AIDSR, AIDCuts, AIDelectronlist, AIDelectronZ0sinT, AIDelectronD0sig, variation)
+        FFIDSR( obs,  IDSR,   IDCuts,         IDelectronlist,          IDelectronZ0sinT,          IDelectronD0sig, variation)
+        FFAIDSR(obs,  AIDSR,  AIDCuts,        AIDelectronlist,         AIDelectronZ0sinT,         AIDelectronD0sig, variation)
+        FFAIDSR(obs,  AID1,   failIDCuts,     failID_electronlist,     failID_electronZ0sinT,     failID_electronD0sig, variation)
+        FFAIDSR(obs,  AID2,   failISOCuts,    failISO_electronlist,    failISO_electronZ0sinT,    failISO_electronD0sig, variation)
+        FFAIDSR(obs,  AID3,   failD0Cuts,     failD0_electronlist,     failD0_electronZ0sinT,     failD0_electronD0sig, variation)
+        FFAIDSR(obs,  AID13,  failID_ISOCuts, failID_D0_electronlist,  failID_D0_electronZ0sinT,  failID_D0_electronD0sig, variation)
+        FFAIDSR(obs,  AID12,  failID_D0Cuts,  failID_ISO_electronlist, failID_ISO_electronZ0sinT, failID_ISO_electronD0sig, variation)
+        FFAIDSR(obs,  AID23,  failISO_D0Cuts, failISO_D0_electronlist, failISO_D0_electronZ0sinT, failISO_D0_electronD0sig, variation)
 
 
     print '%i total events' % eventcount
@@ -175,6 +260,14 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
 
     IDSR.write()
     AIDSR.write()
+    AID1.write() 
+    AID2.write()
+    AID3.write()
+    AID13.write() 
+    AID12.write()
+    AID23.write()
+
+
 
     if debug: print "...done"
 

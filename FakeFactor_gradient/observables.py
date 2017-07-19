@@ -1,4 +1,4 @@
-import re, time, copy, math, array
+import re, time, copy, math
 import ROOT
 from ROOT import TVector2, TLorentzVector, TMath
 ROOT.gROOT.SetBatch(True)
@@ -108,13 +108,83 @@ class observable:
                 AIDelectronVectors.append(AIDelectronVec)
                 AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
                 AIDelectronD0sig.append(self.baseel_d0sig[x])
-                #print "Anti ID Z0:"
-                #print AIDelectronZ0sinT
-                #print "Anti ID pt:"
-                #for vec in AIDelectronVectors:
-                #    print vec.Pt()
         return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
 
+    def getAntiIDelectrons1(self):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            AIDelectronVec = ROOT.TVector3()
+            if( (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
+    def getAntiIDelectrons2(self):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            AIDelectronVec = ROOT.TVector3()
+            if( (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
+    def getAntiIDelectrons3(self):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            AIDelectronVec = ROOT.TVector3()
+            if( (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
+
+    def getAntiIDelectrons12(self):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            AIDelectronVec = ROOT.TVector3()
+            if( (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
+
+    def getAntiIDelectrons13(self):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            AIDelectronVec = ROOT.TVector3()
+            if( (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
+
+    def getAntiIDelectrons23(self):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            AIDelectronVec = ROOT.TVector3()
+            if( (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
 
     def getWeights(self):
         xs_weight = self.xs_weight

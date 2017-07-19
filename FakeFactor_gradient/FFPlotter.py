@@ -400,10 +400,12 @@ def renorm(lumi, path, region, var, indir, debug):
     m_hsum = SumMCHists(BGhist_list, lumi, debug)
     error_d = ROOT.Double()
     error_m = ROOT.Double()
-    #integral_d = m_data.IntegralAndError(11, 20, error_d)
+    #integral_d = m_data.IntegralAndError(11, 20, error_d) #bins for MT 100-200 GeV
     #integral_m = m_hsum.IntegralAndError(11, 20, error_m)
-    integral_d = m_data.IntegralAndError(13, 20, error_d)
-    integral_m = m_hsum.IntegralAndError(13, 20, error_m)
+    #integral_d = m_data.IntegralAndError(13, 20, error_d)
+    #integral_m = m_hsum.IntegralAndError(13, 20, error_m)
+    integral_d = m_data.IntegralAndError(13, 15, error_d) #bins for MET >200 GeV
+    integral_m = m_hsum.IntegralAndError(13, 15, error_m)
 
     renorm, error = divideAndError(integral_d, error_d, integral_m, error_m)
     print "normalization factor for %s = %f +- %f" %(region, renorm, error)
@@ -424,10 +426,14 @@ def main(argv):
     variables = ['Mt', 'MET',  'AntiIDelPt']
     variables1 = ['Mt', 'MET', 'IDelPt']
 
-    AID_norm_path = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_Mt'
-    ID_norm_path  = 'FFIDSR/FFIDSR_FFID/h_FFIDSR_FFID_Mt'
-    AID_lumi  = renorm(10.0, AID_norm_path, 'AID_norm', 'Mt', args.indir, args.test)*10
-    ID_lumi   = renorm(10.0, ID_norm_path,  'ID_norm',  'Mt', args.indir, args.test)*10
+    #AID_norm_path = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_Mt'
+    #ID_norm_path  = 'FFIDSR/FFIDSR_FFID/h_FFIDSR_FFID_Mt'
+    AID_norm_path = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_MET'
+    ID_norm_path  = 'FFIDSR/FFIDSR_FFID/h_FFIDSR_FFID_MET'
+    AID_lumi  = renorm(10.0, AID_norm_path, 'AID_norm', 'MET', args.indir, args.test)*10
+    ID_lumi   = renorm(10.0, ID_norm_path,  'ID_norm',  'MET', args.indir, args.test)*10
+    #AID_lumi  = renorm(10.0, AID_norm_path, 'AID_norm', 'Mt', args.indir, args.test)*10
+    #ID_lumi   = renorm(10.0, ID_norm_path,  'ID_norm',  'Mt', args.indir, args.test)*10
     print "AID lumi %f" % AID_lumi
     print "ID lumi %f" % ID_lumi
 
@@ -442,8 +448,13 @@ def main(argv):
         if args.test: print "running plot()"
         plotCR(ID_lumi, IDSR_skim_path, 'FFID_skim', v,  args.indir, args.test)
 
-    AIDSRSR_skim_path = 'FFAIDSR/FFAIDSR_FFAIDSR/h_FFAIDSR_FFAIDSR_AntiIDelPt' 
+    AIDSRSR_MET_path = 'FFAIDSR/FFAIDSR_FFAIDSR/h_FFAIDSR_FFAIDSR_MET' 
+    IDSRSR_MET_path = 'FFIDSR/FFIDSR_FFIDSR/h_FFIDSR_FFIDSR_MET'
+    AIDSRSR_skim_path = 'FFAIDSR/FFAIDSR_FFAIDSR/h_FFAIDSR_FFAIDSR_AntiIDelPt'
     IDSRSR_skim_path = 'FFIDSR/FFIDSR_FFIDSR/h_FFIDSR_FFIDSR_IDelPt'
+
+    plotCR(AID_lumi, AIDSRSR_MET_path, 'AIDSR_skim', 'MET',  args.indir, args.test)
+    plotCR(ID_lumi, IDSRSR_MET_path, 'IDSR_skim', 'MET',  args.indir, args.test)
 
     num_list, num_error = plotSR(ID_lumi, IDSRSR_skim_path, 'IDSR_skim', 'IDelPt',  args.indir, args.test)
     denom_list, denom_error = plotSR(AID_lumi, AIDSRSR_skim_path, 'AIDSR_skim', 'AntiIDelPt',  args.indir, args.test)
