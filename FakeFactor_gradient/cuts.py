@@ -22,8 +22,9 @@ class cuts:
         #Make list of dictionaresy of cuts
         Dics = []
         for el in IDlist:
-            IDpt = el.Pt()
-            mtID = obs.getMT(el)
+            elPt = el.Pt()
+            elEta = abs(el.Eta())
+            mt = obs.getMT(el)
             #Make dictionary of cuts
             Cuts = {}
             
@@ -31,12 +32,12 @@ class cuts:
             #    Cuts["1el"] = True
             #else: Cuts["1el"] = False
 
-            if( mtID < 40. ):
+            if( mt < 40. ):
                 Cuts["40mt"] = True
             else:
                 Cuts["40mt"] = False
 
-            if( mtID > 100. and mtID < 200. ):
+            if( mt > 100. and mt < 200. ):
                 Cuts["100mt200"] = True
             else: 
                 Cuts["100mt200"] = False
@@ -57,25 +58,45 @@ class cuts:
                 Cuts["HLT_e20"] = True
             else: Cuts["HLT_e20"] = False
 
-            if( IDpt > 0. and IDpt <= 11 ):
+            if( elPt > 0. and elPt <= 11 ):
                 Cuts["el5"] = True
             else: Cuts["el5"] = False
 
-            if( IDpt > 11. and IDpt <= 18 ):
+            if( elPt > 11. and elPt <= 18 ):
                 Cuts["el10"] = True
             else: Cuts["el10"] = False
 
-            if( IDpt > 18. and IDpt <= 23 ):
+            if( elPt > 18. and elPt <= 23 ):
                 Cuts["el15"] = True
             else: Cuts["el15"] = False
 
-            if( IDpt > 23. ):
+            if( elPt > 23. ):
                 Cuts["el20"] = True
             else: Cuts["el20"] = False
 
-            if( IDpt > 0. ):
+            if( elPt > 0. ):
                 Cuts["el"] = True
             else: Cuts["el"] = False
+
+            if( elEta >= 0.0 and elEta < 0.7 ):
+                Cuts["elEta07"] = True
+            else: Cuts["elEta07"] = False
+
+            if( elEta >= 0.7 and elEta < 1.37 ):
+                Cuts["elEta137"] = True
+            else: Cuts["elEta137"] = False
+
+            if( elEta >= 1.37 and elEta < 1.52 ):
+                Cuts["elEta152"] = True
+            else: Cuts["elEta152"] = False
+
+            if( elEta >= 1.52 and elEta < 2.01 ):
+                Cuts["elEta201"] = True
+            else: Cuts["elEta201"] = False
+
+            if( elEta >= 2.01 and elEta < 2.47 ):
+                Cuts["elEta247"] = True
+            else: Cuts["elEta247"] = False
 
             Dics.append(Cuts)
 
