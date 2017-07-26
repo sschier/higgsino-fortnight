@@ -7,27 +7,38 @@ class observable:
     def __init__(self, event, isdata):
 
         self.varibales={}
+        #pileup
+        self.num_pv =                       event.num_pv
+        self.mu =                           event.av_int_per_xing
+        #MET variables
         self.met = event.met/1000.
-        #self.mt = event.mt/1000.
-        self.met_phi = event.met_phi
-        self.HLT_e5 = event.HLT_e5_lhvloose
-        self.HLT_e10 = event.HLT_e10_lhvloose_L1EM7
-        self.HLT_e15 = event.HLT_e15_lhvloose_L1EM13VH
-        self.HLT_e20 = event.HLT_e20_lhvloose
-        self.n_baseel = event.n_baseel
-        self.baseel_idTight = event.baseel_idTight
-        self.baseel_isoTight = event.baseel_isoTight
-        self.baseel_isoGradientLoose = event.baseel_isoGradientLoose
-        self.baseel_d0sig = event.baseel_d0sig
-        self.baseel_z0sinTheta = event.baseel_z0sinTheta
-        self.baseel_pt = event.baseel_pt 
-        self.baseel_eta = event.baseel_eta 
-        self.baseel_phi = event.baseel_phi
-        #self.lep_truthMatched = event.lep_truthMatched
-        #self.lep_pt = event.lep_pt
-        #self.lep_phi = event.lep_phi
-        #self.lep_eta = event.lep_eta
-        #self.n_lep = event.n_lep
+        self.met_phi =                      event.met_phi
+        #Trigger variables
+        self.HLT_e5 =                       event.HLT_e5_lhvloose
+        self.HLT_e10 =                      event.HLT_e10_lhvloose_L1EM7
+        self.HLT_e15 =                      event.HLT_e15_lhvloose_L1EM13VH
+        self.HLT_e20 =                      event.HLT_e20_lhvloose
+        #Jet variables
+        self.n_jet =                        event.n_jet
+        self.n_bjet =                       event.n_bjet
+        self.jet_eta =                      event.jet_eta
+        self.jet_phi =                      event.jet_phi
+        self.jet_pt =                       event.jet_pt
+        #electron varaibles
+        self.n_baseel =                     event.n_baseel
+        self.baseel_idTight =               event.baseel_idTight
+        self.baseel_idMedium =              event.baseel_idMedium
+        self.baseel_idLooseAndBLayerLLH =   event.baseel_idLooseAndBLayerLLH
+        self.baseel_isoTight =              event.baseel_isoTight
+        self.baseel_isoGradientLoose =      event.baseel_isoGradientLoose
+        self.baseel_isoLoose =              event.baseel_isoLoose
+        self.baseel_d0sig =                 event.baseel_d0sig
+        self.baseel_z0sinTheta =            event.baseel_z0sinTheta
+        self.baseel_pt =                    event.baseel_pt 
+        self.baseel_eta =                   event.baseel_eta 
+        self.baseel_phi =                   event.baseel_phi
+        self.baseel_elecAuthor =            event.baseel_elecAuthor
+        self.baseel_ptvarcone30 =           event.baseel_ptvarcone30
         if isdata == '':
             self.xs_weight = event.xs_weight
             self.mc_event_weight = event.mc_event_weight
@@ -37,6 +48,11 @@ class observable:
             self.sf_jvt = event.sf_jvt
             self.sf_btag = event.sf_btag
 
+    def getHT(self):
+        ht =0.0 
+        for x in xrange(self.n_jet):
+            ht += self.jet_pt[x]/1000.
+        return ht
 
     def getMET(self):
         met = self.met
@@ -51,6 +67,14 @@ class observable:
         #if( self.getDphiL1MET(lep1Vec.Phi()) > -99. ):
         mt = TMath.Sqrt(2*lep1Vec.Pt()*met*(1-TMath.Cos(self.getDphiL1MET(lep1Vec.Phi()))))
         return mt
+
+    def getDphiJ1MET(self):
+        dphi_j1met = -99.
+        met_phi = self.met_phi
+        if self.n_jet > 0:
+            j1phi = self.jet_phi[0]
+            dphi_j1met = TVector2.Phi_mpi_pi(j1phi - met_phi)
+        return dphi_j1met
 
     def getDphiL1MET(self, l1phi):
         dphi_l1met = -99.
@@ -85,101 +109,257 @@ class observable:
         IDelectronD0sig = []
         for x in xrange(self.n_baseel):
             IDelectronVec = ROOT.TVector3() 
-            if( self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) < 5. and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+            if( self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) < 5. and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_elecAuthor[x] != 16):
+                #Fill vectors and return
                 IDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
                 IDelectronVectors.append(IDelectronVec)
                 IDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
                 IDelectronD0sig.append(self.baseel_d0sig[x])
-                #print "ID Z0:"
-                #print IDelectronZ0sinT
-                #print "ID pt:"
-                #for vec in IDelectronVectors:
-                #    print vec.Pt()
+                if self.baseel_elecAuthor[x] == 16:
+                    print "Conversion in signal leptons!!"
         return IDelectronVectors, IDelectronZ0sinT, IDelectronD0sig
 
-    def getAntiIDelectrons(self):
+    def getAntiIDelectrons(self, AIDvariation):
         AIDelectronVectors = []
         AIDelectronZ0sinT = []
         AIDelectronD0sig = []
         for x in xrange(self.getNBaseel()):
+            condition = False
             AIDelectronVec = ROOT.TVector3()
-            if( (self.baseel_idTight[x] == 0 or self.baseel_isoGradientLoose[x] == 0 or abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+            if( AIDvariation == 'Blayer' or AIDvariation == 'blayer' or AIDvariation == 'BLayer'):
+                if( self.baseel_elecAuthor[x] != 16 and self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_z0sinTheta[x]) < 0.5 and (self.baseel_idTight[x] == 0 or self.baseel_isoGradientLoose[x] == 0 or abs(self.baseel_d0sig[x]) >= 5.) ): 
+                    condition = True
+
+            elif( AIDvariation == 'medium' or AIDvariation == 'Medium' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idMedium[x] == 1 and (self.baseel_idTight[x] == 0 or self.baseel_isoGradientLoose[x] == 0 or abs(self.baseel_d0sig[x]) >= 5.)  ): 
+                    condition = True
+
+            elif( AIDvariation == 'mediumD0sig' or AIDvariation == 'MediumD0Sig' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and ((self.baseel_idMedium[x] == 1 and (self.baseel_idTight[x] == 0 or self.baseel_isoGradientLoose[x] == 0 or abs(self.baseel_d0sig[x]) >= 5.)) or (self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_d0sig[x]) > 1.0 and (self.baseel_idTight[x] == 0 or self.baseel_isoGradientLoose[x] == 0 or abs(self.baseel_d0sig[x]) >= 5.))) ): 
+                    condition = True
+
+            else: #else nomimal AID definition
+                if( self.baseel_elecAuthor[x] != 16 and (self.baseel_idTight[x] == 0 or self.baseel_isoGradientLoose[x] == 0 or abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): condition = True
+            if( condition == True ):
+                #Fill vectors and return
                 AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
                 AIDelectronVectors.append(AIDelectronVec)
                 AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
                 AIDelectronD0sig.append(self.baseel_d0sig[x])
         return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
 
-    def getAntiIDelectrons1(self):
+    # fail ID cuts only
+    def getAntiIDelectrons1(self, AIDvariation):
         AIDelectronVectors = []
         AIDelectronZ0sinT = []
         AIDelectronD0sig = []
         for x in xrange(self.getNBaseel()):
+            condition = False
             AIDelectronVec = ROOT.TVector3()
-            if( (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
-                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
-                AIDelectronVectors.append(AIDelectronVec)
-                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
-                AIDelectronD0sig.append(self.baseel_d0sig[x])
-        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
-    def getAntiIDelectrons2(self):
-        AIDelectronVectors = []
-        AIDelectronZ0sinT = []
-        AIDelectronD0sig = []
-        for x in xrange(self.getNBaseel()):
-            AIDelectronVec = ROOT.TVector3()
-            if( (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
-                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
-                AIDelectronVectors.append(AIDelectronVec)
-                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
-                AIDelectronD0sig.append(self.baseel_d0sig[x])
-        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
-    def getAntiIDelectrons3(self):
-        AIDelectronVectors = []
-        AIDelectronZ0sinT = []
-        AIDelectronD0sig = []
-        for x in xrange(self.getNBaseel()):
-            AIDelectronVec = ROOT.TVector3()
-            if( (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+
+            if (AIDvariation == 'Blayer' or AIDvariation == 'blayer' or AIDvariation == 'BLayer'):
+                if( self.baseel_elecAuthor[x] != 16 and self.baseel_idLooseAndBLayerLLH[x] == 1 and (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): 
+                    condition = True
+
+            elif( AIDvariation == 'medium' or AIDvariation == 'Medium' ): 
+                condition = False
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idMedium[x] == 1 and self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) < 5.  ): 
+                    condition = True
+
+            elif( AIDvariation == 'mediumD0sig' or AIDvariation == 'MediumD0Sig' ): 
+                condition = False
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) < 5. and (self.baseel_idMedium[x] == 1 or (self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_d0sig[x]) > 1.0)) ): 
+                    condition = True
+
+            else:
+                if( self.baseel_elecAuthor[x] != 16 and (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): 
+                    condition = True
+            if( condition == True ):
+                #Fill vectors and return
                 AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
                 AIDelectronVectors.append(AIDelectronVec)
                 AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
                 AIDelectronD0sig.append(self.baseel_d0sig[x])
         return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
 
-    def getAntiIDelectrons12(self):
+    # fail iso cuts only
+    def getAntiIDelectrons2(self, AIDvariation):
         AIDelectronVectors = []
         AIDelectronZ0sinT = []
         AIDelectronD0sig = []
         for x in xrange(self.getNBaseel()):
+            condition = False
             AIDelectronVec = ROOT.TVector3()
-            if( (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+            if (AIDvariation == 'Blayer' or AIDvariation == 'blayer' or AIDvariation == 'BLayer'):
+                if( self.baseel_elecAuthor[x] != 16 and self.baseel_idLooseAndBLayerLLH[x] == 1 and (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): 
+                    condition = True
+
+            elif( AIDvariation == 'medium' or AIDvariation == 'Medium' ): 
+                condition = False
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idMedium[x] == 1 and self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.  ): 
+                    condition = True
+
+            elif( AIDvariation == 'mediumD0sig' or AIDvariation == 'MediumD0Sig' ): 
+                condition = False
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5 and (self.baseel_idMedium[x] == 1 or (self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_d0sig[x]) > 1.0)) ): 
+                    condition = True
+
+            else:
+                if( self.baseel_elecAuthor[x] != 16 and  (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): condition = True
+            if( condition == True ):
+                #Fill vectors and return
                 AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
                 AIDelectronVectors.append(AIDelectronVec)
                 AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
                 AIDelectronD0sig.append(self.baseel_d0sig[x])
         return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
 
-    def getAntiIDelectrons13(self):
+    #fail D0 curs only
+    def getAntiIDelectrons3(self, AIDvariation):
         AIDelectronVectors = []
         AIDelectronZ0sinT = []
         AIDelectronD0sig = []
         for x in xrange(self.getNBaseel()):
+            condition = False
             AIDelectronVec = ROOT.TVector3()
-            if( (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+            if (AIDvariation == 'Blayer' or AIDvariation == 'blayer' or AIDvariation == 'BLayer'):
+                if( self.baseel_elecAuthor[x] != 16 and self.baseel_idLooseAndBLayerLLH[x] == 1 and (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): 
+                    condition = True
+
+            elif( AIDvariation == 'medium' or AIDvariation == 'Medium' ): 
+                condition = False
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idMedium[x] == 1 and self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.  ): 
+                    condition = True
+
+            elif( AIDvariation == 'mediumD0sig' or AIDvariation == 'MediumD0Sig' ): 
+                condition = False
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5 and (self.baseel_idMedium[x] == 1 or (self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_d0sig[x]) > 1.0)) ): 
+                    condition = True
+
+            else:
+                if( self.baseel_elecAuthor[x] != 16 and  (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): condition = True
+            if( condition == True ):
+                #Fill vectors and return
                 AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
                 AIDelectronVectors.append(AIDelectronVec)
                 AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
                 AIDelectronD0sig.append(self.baseel_d0sig[x])
         return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
 
-    def getAntiIDelectrons23(self):
+    #fail ID and iso only
+    def getAntiIDelectrons12(self, AIDvariation):
         AIDelectronVectors = []
         AIDelectronZ0sinT = []
         AIDelectronD0sig = []
         for x in xrange(self.getNBaseel()):
+            condition = False
             AIDelectronVec = ROOT.TVector3()
-            if( (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ):
+            if (AIDvariation == 'Blayer' or AIDvariation == 'blayer' or AIDvariation == 'BLayer'):
+                if( self.baseel_elecAuthor[x] != 16 and self.baseel_idLooseAndBLayerLLH[x] == 1 and (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): 
+                    condition = True
+
+            elif( AIDvariation == 'medium' or AIDvariation == 'Medium' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idMedium[x] == 1 and self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.  ): 
+                    condition = True
+
+            elif( AIDvariation == 'mediumD0sig' or AIDvariation == 'MediumD0Sig' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5 and (self.baseel_idMedium[x] == 1 or (self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_d0sig[x]) > 1.0)) ): 
+                    condition = True
+
+            else:
+                if( self.baseel_elecAuthor[x] != 16 and (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) < 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): condition = True
+            if( condition == True ):
+                #Fill vectors and return
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
+
+
+    #fail ID and D0 only 
+    def getAntiIDelectrons13(self, AIDvariation):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            condition = False
+            AIDelectronVec = ROOT.TVector3()
+            if (AIDvariation == 'Blayer' or AIDvariation == 'blayer' or AIDvariation == 'BLayer'):
+                if( self.baseel_elecAuthor[x] != 16 and self.baseel_idLooseAndBLayerLLH[x] == 1 and (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): 
+                    condition = True
+
+            elif( AIDvariation == 'medium' or AIDvariation == 'Medium' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idMedium[x] == 1 and self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.  ): 
+                    condition = True
+
+            elif( AIDvariation == 'mediumD0sig' or AIDvariation == 'MediumD0Sig' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5 and (self.baseel_idMedium[x] == 1 or (self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_d0sig[x]) > 1.0)) ): 
+                    condition = True
+
+            else:
+                if(self.baseel_elecAuthor[x] != 16 and (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 1 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): condition = True
+            if( condition == True ):
+                #Fill vectors and return
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
+
+    #fail iso and D0 only
+    def getAntiIDelectrons23(self, AIDvariation):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            condition = False
+            AIDelectronVec = ROOT.TVector3()
+            if (AIDvariation == 'Blayer' or AIDvariation == 'blayer' or AIDvariation == 'BLayer'):
+                if( self.baseel_elecAuthor[x] != 16 and self.baseel_idLooseAndBLayerLLH[x] == 1 and (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): 
+                    condition = True
+
+            elif( AIDvariation == 'medium' or AIDvariation == 'Medium' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idMedium[x] == 1 and self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5.  ): 
+                    condition = True
+
+            elif( AIDvariation == 'mediumD0sig' or AIDvariation == 'MediumD0Sig' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5 and (self.baseel_idMedium[x] == 1 or (self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_d0sig[x]) > 1.0)) ): 
+                    condition = True
+
+            else:
+                if( self.baseel_elecAuthor[x] != 16 and (self.baseel_idTight[x] == 1 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): condition = True
+            if( condition == True ):
+                AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
+                AIDelectronVectors.append(AIDelectronVec)
+                AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])
+                AIDelectronD0sig.append(self.baseel_d0sig[x])
+        return AIDelectronVectors, AIDelectronZ0sinT, AIDelectronD0sig
+
+    #fail all cuts only
+    def getAntiIDelectrons123(self, AIDvariation):
+        AIDelectronVectors = []
+        AIDelectronZ0sinT = []
+        AIDelectronD0sig = []
+        for x in xrange(self.getNBaseel()):
+            condition = False
+            AIDelectronVec = ROOT.TVector3()
+            if (AIDvariation == 'Blayer' or AIDvariation == 'blayer' or AIDvariation == 'BLayer'):
+                if( self.baseel_elecAuthor[x] != 16 and self.baseel_idLooseAndBLayerLLH[x] == 1 and (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): 
+                    condition = True
+
+            elif( AIDvariation == 'medium' or AIDvariation == 'Medium' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idMedium[x] == 1 and self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5.  ): 
+                    condition = True
+
+            elif( AIDvariation == 'mediumD0sig' or AIDvariation == 'MediumD0Sig' ): 
+                if( self.baseel_elecAuthor[x] != 16 and abs(self.baseel_z0sinTheta[x]) < 0.5 and self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5 and (self.baseel_idMedium[x] == 1 or (self.baseel_idLooseAndBLayerLLH[x] == 1 and abs(self.baseel_d0sig[x]) > 1.0)) ): 
+                    condition = True
+
+            else:
+                if( self.baseel_elecAuthor[x] != 16 and (self.baseel_idTight[x] == 0 and self.baseel_isoGradientLoose[x] == 0 and abs(self.baseel_d0sig[x]) >= 5.) and abs(self.baseel_z0sinTheta[x]) < 0.5 ): condition = True
+            if( condition == True ):
+                #Fill vectors and return
                 AIDelectronVec.SetPtEtaPhi(self.baseel_pt[x]/1000., self.baseel_eta[x], self.baseel_phi[x])
                 AIDelectronVectors.append(AIDelectronVec)
                 AIDelectronZ0sinT.append(self.baseel_z0sinTheta[x])

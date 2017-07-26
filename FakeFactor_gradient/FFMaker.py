@@ -39,10 +39,10 @@ def FFIDSR(event, hc, IDCuts, elList, Z0list, D0list, variation):
             if( CutsDict["40mt"] ):
                 nlepSR_fill += 1
                 hc.fill(event, "FFIDSR", el, z0, d0, variation)
-    #if len(elList):
-    #    hc.fillN(event, "FFIDN", elList[0], nlep, variation)
-    #    hc.fillN(event, "FFIDNfill", elList[0], nlep_fill, variation)
-    #    hc.fillN(event, "FFIDSRNfill", elList[0], nlepSR_fill, variation)
+    if len(elList):
+        hc.fillN(event, "FFIDN", elList[0], nlep, variation)
+        hc.fillN(event, "FFIDNfill", elList[0], nlep_fill, variation)
+        hc.fillN(event, "FFIDSRNfill", elList[0], nlepSR_fill, variation)
     return True
 #======================================================================
 def FFAIDSR(event, hc, AIDCuts, elList, Z0list, D0list, variation):
@@ -65,14 +65,72 @@ def FFAIDSR(event, hc, AIDCuts, elList, Z0list, D0list, variation):
             if( CutsDict["40mt"] ):
                 nlepSR_fill += 1
                 hc.fill(event, "FFAIDSR", el, z0, d0, variation)
-    #if len(elList):
-    #    hc.fillN(event, "FFAIDN", elList[0], nlep, variation)
-    #    hc.fillN(event, "FFAIDNfill", elList[0], nlep_fill, variation)
-    #    hc.fillN(event, "FFAIDSRNfill", elList[0], nlepSR_fill, variation)
+    if len(elList):
+        hc.fillN(event, "FFAIDN", elList[0], nlep, variation)
+        hc.fillN(event, "FFAIDNfill", elList[0], nlep_fill, variation)
+        hc.fillN(event, "FFAIDSRNfill", elList[0], nlepSR_fill, variation)
+    return True
+#======================================================================
+def FFIDSR2D(event, hc, IDCuts, elList, Z0list, D0list, variation):
+    for CutsDict, el, z0, d0 in zip(IDCuts, elList, Z0list, D0list):
+        if( CutsDict["elEta07"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFIDEta07", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFIDSREta07", el, z0, d0, variation)
+        elif( CutsDict["elEta137"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFIDEta137", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFIDSREta137", el, z0, d0, variation)
+        elif( CutsDict["elEta152"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFIDEta152", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFIDSREta152", el, z0, d0, variation)
+        elif( CutsDict["elEta201"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFIDEta201", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFIDSREta201", el, z0, d0, variation)
+        elif( CutsDict["elEta247"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFIDEta247", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFIDSREta247", el, z0, d0, variation)
+    return True
+#======================================================================
+def FFAIDSR2D(event, hc, AIDCuts, elList, Z0list, D0list, variation):
+    for CutsDict, el, z0, d0 in zip(AIDCuts, elList, Z0list, D0list):
+        if( CutsDict["elEta07"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFAIDEta07", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFAIDSREta07", el, z0, d0, variation)
+        elif( CutsDict["elEta137"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFAIDEta137", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFAIDSREta137", el, z0, d0, variation)
+        elif( CutsDict["elEta152"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFAIDEta152", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFAIDSREta152", el, z0, d0, variation)
+        elif( CutsDict["elEta201"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFAIDEta201", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFAIDSREta201", el, z0, d0, variation)
+        elif( CutsDict["elEta247"] ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+                hc.fill(event, "FFAIDEta247", el, z0, d0, variation)
+                if( CutsDict["40mt"] ):
+                    hc.fill(event, "FFAIDSREta247", el, z0, d0, variation)
     return True
 #======================================================================
 #
-def analyze(infile, tree, data, signal, outfile, debug, region, variation):
+def analyze(infile, tree, data, signal, outfile, debug, region, variation, AIDvariation):
 
     if debug: print "opening input file"
 
@@ -117,6 +175,31 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
     AIDSR.addantiidcollection("HLTe10")
     AIDSR.addantiidcollection("HLTe15")
     AIDSR.addantiidcollection("HLTe20")
+
+    IDSR2D=histcollection("FFIDSR2D", o, 0, data, tree, 0)
+    IDSR2D.addidcollection("FFIDEta07")
+    IDSR2D.addidcollection("FFIDSREta07")
+    IDSR2D.addidcollection("FFIDEta137")
+    IDSR2D.addidcollection("FFIDSREta137")
+    IDSR2D.addidcollection("FFIDEta152")
+    IDSR2D.addidcollection("FFIDSREta152")
+    IDSR2D.addidcollection("FFIDEta201")
+    IDSR2D.addidcollection("FFIDSREta201")
+    IDSR2D.addidcollection("FFIDEta247")
+    IDSR2D.addidcollection("FFIDSREta247")
+
+    AIDSR2D=histcollection("FFAIDSR2D", o, 0, data, tree, 0)
+    AIDSR2D.addantiidcollection("FFAIDEta07")
+    AIDSR2D.addantiidcollection("FFAIDSREta07")
+    AIDSR2D.addantiidcollection("FFAIDEta137")
+    AIDSR2D.addantiidcollection("FFAIDSREta137")
+    AIDSR2D.addantiidcollection("FFAIDEta152")
+    AIDSR2D.addantiidcollection("FFAIDSREta152")
+    AIDSR2D.addantiidcollection("FFAIDEta201")
+    AIDSR2D.addantiidcollection("FFAIDSREta201")
+    AIDSR2D.addantiidcollection("FFAIDEta247")
+    AIDSR2D.addantiidcollection("FFAIDSREta247")
+
 
     AID1=histcollection("AID1", o, 0, data, tree, 0)
     AID1.addfakecollection("FFAIDN")
@@ -184,6 +267,17 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
     AID23.addantiidcollection("HLTe15")
     AID23.addantiidcollection("HLTe20")
 
+    AID123=histcollection("AID123", o, 0, data, tree, 0)
+    AID123.addfakecollection("FFAIDN")
+    AID123.addfakecollection("FFAIDNfill")
+    AID123.addfakecollection("FFAIDSRNfill")
+    AID123.addantiidcollection("FFAID")
+    AID123.addantiidcollection("FFAIDSR")
+    AID123.addantiidcollection("HLTe5")
+    AID123.addantiidcollection("HLTe10")
+    AID123.addantiidcollection("HLTe15")
+    AID123.addantiidcollection("HLTe20")
+
     eventcount = 0
 
     #-------------------------
@@ -198,7 +292,9 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
         #______________________
 
         eventcount +=1
-        #print "event %i" % eventcount
+        if debug:
+            print '*************************************************'
+            print "event %i" % eventcount
 
         #----------------------------
         #define preliminary variables
@@ -208,13 +304,25 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
 
         obs = observable(event, data)
         IDelectronlist,           IDelectronZ0sinT,           IDelectronD0sig = obs.getIDelectrons()
-        AIDelectronlist,          AIDelectronZ0sinT,          AIDelectronD0sig = obs.getAntiIDelectrons()
-        failID_electronlist,      failID_electronZ0sinT,      failID_electronD0sig = obs.getAntiIDelectrons1()
-        failISO_electronlist,     failISO_electronZ0sinT,     failISO_electronD0sig = obs.getAntiIDelectrons2()
-        failD0_electronlist,      failD0_electronZ0sinT,      failD0_electronD0sig = obs.getAntiIDelectrons3()
-        failID_ISO_electronlist,  failID_ISO_electronZ0sinT,  failID_ISO_electronD0sig = obs.getAntiIDelectrons12()
-        failID_D0_electronlist,   failID_D0_electronZ0sinT,   failID_D0_electronD0sig = obs.getAntiIDelectrons13()
-        failISO_D0_electronlist,  failISO_D0_electronZ0sinT,  failISO_D0_electronD0sig = obs.getAntiIDelectrons23()
+        AIDelectronlist,          AIDelectronZ0sinT,          AIDelectronD0sig = obs.getAntiIDelectrons(AIDvariation)
+        failID_electronlist,      failID_electronZ0sinT,      failID_electronD0sig = obs.getAntiIDelectrons1(AIDvariation)
+        failISO_electronlist,     failISO_electronZ0sinT,     failISO_electronD0sig = obs.getAntiIDelectrons2(AIDvariation)
+        failD0_electronlist,      failD0_electronZ0sinT,      failD0_electronD0sig = obs.getAntiIDelectrons3(AIDvariation)
+        failID_ISO_electronlist,  failID_ISO_electronZ0sinT,  failID_ISO_electronD0sig = obs.getAntiIDelectrons12(AIDvariation)
+        failID_D0_electronlist,   failID_D0_electronZ0sinT,   failID_D0_electronD0sig = obs.getAntiIDelectrons13(AIDvariation)
+        failISO_D0_electronlist,  failISO_D0_electronZ0sinT,  failISO_D0_electronD0sig = obs.getAntiIDelectrons23(AIDvariation)
+        failAll_electronlist,     failAll_electronZ0sinT,      failAll_electronD0sig = obs.getAntiIDelectrons123(AIDvariation)
+        
+        if debug:
+            print 'AID: %i' % len(AIDelectronlist)
+            print 'fail ID: %i' % len(failID_electronlist)
+            print 'fail ISO: %i' % len(failISO_electronlist)
+            print 'fail D0: %i' % len(failD0_electronlist)
+            print 'fail ID ISO: %i' % len(failID_ISO_electronlist)
+            print 'fail ID D0: %i' % len(failID_D0_electronlist)
+            print 'fail ISO D0: %i' % len(failISO_D0_electronlist)
+            print 'fail All: %i' % len(failAll_electronlist)
+
         cutdict = cuts(obs) 
         IDCuts = cutdict.getCuts(IDelectronlist)
         AIDCuts = cutdict.getCuts(AIDelectronlist)
@@ -224,7 +332,7 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
         failID_ISOCuts = cutdict.getCuts(failID_ISO_electronlist)
         failID_D0Cuts = cutdict.getCuts(failID_D0_electronlist)
         failISO_D0Cuts = cutdict.getCuts(failISO_D0_electronlist)
-        print failID_electronlist
+        failAllCuts = cutdict.getCuts(failAll_electronlist)
 
         triggers = {}
         HLT_e5, HLT_e10, HLT_e15, HLT_e20 = obs.getTriggers()
@@ -245,14 +353,17 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
         #------------------------------
         #trigger efficiency regions
         #------------------------------
-        FFIDSR( obs,  IDSR,   IDCuts,         IDelectronlist,          IDelectronZ0sinT,          IDelectronD0sig, variation)
+        FFIDSR(obs,   IDSR,   IDCuts,         IDelectronlist,          IDelectronZ0sinT,          IDelectronD0sig, variation)
         FFAIDSR(obs,  AIDSR,  AIDCuts,        AIDelectronlist,         AIDelectronZ0sinT,         AIDelectronD0sig, variation)
+        FFIDSR2D(obs, IDSR2D, IDCuts,         IDelectronlist,          IDelectronZ0sinT,          IDelectronD0sig, variation)
+        FFAIDSR2D(obs,AIDSR2D,AIDCuts,        AIDelectronlist,         AIDelectronZ0sinT,         AIDelectronD0sig, variation)
         FFAIDSR(obs,  AID1,   failIDCuts,     failID_electronlist,     failID_electronZ0sinT,     failID_electronD0sig, variation)
         FFAIDSR(obs,  AID2,   failISOCuts,    failISO_electronlist,    failISO_electronZ0sinT,    failISO_electronD0sig, variation)
         FFAIDSR(obs,  AID3,   failD0Cuts,     failD0_electronlist,     failD0_electronZ0sinT,     failD0_electronD0sig, variation)
-        FFAIDSR(obs,  AID13,  failID_ISOCuts, failID_D0_electronlist,  failID_D0_electronZ0sinT,  failID_D0_electronD0sig, variation)
-        FFAIDSR(obs,  AID12,  failID_D0Cuts,  failID_ISO_electronlist, failID_ISO_electronZ0sinT, failID_ISO_electronD0sig, variation)
+        FFAIDSR(obs,  AID13,  failID_D0Cuts,  failID_D0_electronlist,  failID_D0_electronZ0sinT,  failID_D0_electronD0sig, variation)
+        FFAIDSR(obs,  AID12,  failID_ISOCuts, failID_ISO_electronlist, failID_ISO_electronZ0sinT, failID_ISO_electronD0sig, variation)
         FFAIDSR(obs,  AID23,  failISO_D0Cuts, failISO_D0_electronlist, failISO_D0_electronZ0sinT, failISO_D0_electronD0sig, variation)
+        FFAIDSR(obs,  AID123, failAllCuts,    failAll_electronlist,    failAll_electronZ0sinT,    failAll_electronD0sig, variation)
 
 
     print '%i total events' % eventcount
@@ -260,12 +371,15 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
 
     IDSR.write()
     AIDSR.write()
+    IDSR2D.write()
+    AIDSR2D.write()
     AID1.write() 
     AID2.write()
     AID3.write()
     AID13.write() 
     AID12.write()
     AID23.write()
+    AID123.write()
 
 
 
@@ -277,20 +391,21 @@ def analyze(infile, tree, data, signal, outfile, debug, region, variation):
 def main(argv):
 
     parser = argparse.ArgumentParser(description="Command line arguments")
-    parser.add_argument("--input"      , action='store', default='', help='input root file containing tree to loop over')
+    parser.add_argument("-input"      , action='store', default='', help='input root file containing tree to loop over')
     parser.add_argument("-variation"   , action='store', default='', help='set for a systematic varaiation')
-    parser.add_argument("--tree"        , action='store', default='')
-    parser.add_argument("--isData"      , action='store', default='')
+    parser.add_argument("-AIDvariation"   , action='store', default='', help='set for a anti-ID definition varaiation')
+    parser.add_argument("-tree"        , action='store', default='')
+    parser.add_argument("-isData"      , action='store', default='')
     parser.add_argument("--isSignal"    , action='store_true')
-    parser.add_argument("--outfile"     , action='store', default='')
+    parser.add_argument("-outfile"     , action='store', default='')
     parser.add_argument("--test"        , action='store_true')
-    parser.add_argument("--region"      , action='store', default='', help='current avaiable regions are trigger and dilepton')
+    parser.add_argument("-region"      , action='store', default='', help='current avaiable regions are trigger and dilepton')
     args=parser.parse_args()
 
 
     print "Starting Analysis"
 
-    analyze(args.input,  args.tree, args.isData, args.isSignal, args.outfile, args.test, args.region, args.variation)   
+    analyze(args.input,  args.tree, args.isData, args.isSignal, args.outfile, args.test, args.region, args.variation, args.AIDvariation)   
 
     print "Done"
 
