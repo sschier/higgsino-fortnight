@@ -1,0 +1,203 @@
+cp_and_run>  ----  batch_utils/cp_and_run.main()  -----------------------
+cp_and_run>  ----  batch_utils/cp_and_run.get_input_files()  ----
+
+-------------------------------------------------------------------------
+cp_and_run>  user:         sschier
+cp_and_run>  exe:          /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py
+cp_and_run>  arg-template: " -input=%s -variation=pileup -isData=data16 -tree=CollectionTree -outfile=outputHist_data16.root"
+cp_and_run>  input_files:
+  /export/share/data/sschier/FakeLepton/full_samples_2_4_25/data16_13TeV/data16_13TeV.00307126.data16_13TeV.DAOD_SUSY5.root
+-------------------------------------------------------------------------
+cp_and_run>  HOSTNAME (submitter):    atlas02.ucsc.edu
+cp_and_run>  hostname (this worker):  wrk0prv.ucsc.edu
+cp_and_run>  ip:  192.168.100.100
+cp_and_run>  id:  uid=1076(sschier) gid=100(users) groups=100(users) context=unconfined_u:system_r:condor_startd_t:s0
+cp_and_run>  cwd: /var/lib/condor/execute/dir_491275
+-------------------------------------------------------------------------
+
+cp_and_run>  ----  copy input files  ------------------------------------
+cp_and_run>  waiting for slot...
+[2017-06-18:17:35:01] INFO: _acquire_slot(queue_path, 0) by sschier
+cp_and_run>  got slot 0
+cp_and_run>  doing a copy (try 1)
+cp_and_run>  cp /export/share/data/sschier/FakeLepton/full_samples_2_4_25/data16_13TeV/data16_13TeV.00307126.data16_13TeV.DAOD_SUSY5.root f000_data16_13TeV_data16_13TeV.00307126.data16_13TeV.DAOD_SUSY5.root
+cp_and_run>  copied successfully.
+cp_and_run>  releasing slot 0
+[2017-06-18:17:35:03] INFO: release_slot(queue_path, 0) by sschier
+cp_and_run>  files in the working directory now after copying:
+total 101M
+-rwx------. 1 sschier users    48 Jun 18 17:35 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 18 17:35 condor_exec.exe*
+-rw-r--r--. 1 sschier users  1.7K Jun 18 17:35 _condor_stdout
+-rwxr-xr-x. 1 sschier users  101M Jun 18 17:35 f000_data16_13TeV_data16_13TeV.00307126.data16_13TeV.DAOD_SUSY5.root*
+-rw-r--r--. 1 condor  condor  13K Jun 18 17:35 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 18 17:35 .machine.ad
+
+
+cp_and_run>  ----  run the program  -------------------------------------
+cp_and_run>  running your program...
+cp_and_run>  /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py  -input=f000_data16_13TeV_data16_13TeV.00307126.data16_13TeV.DAOD_SUSY5.root -variation=pileup -isData=data16 -tree=CollectionTree -outfile=outputHist_data16.root
+[?1034hStarting Analysis
+running over file f000_data16_13TeV_data16_13TeV.00307126.data16_13TeV.DAOD_SUSY5.root
+getting events in CollectionTree
+1000 events analyzed
+2000 events analyzed
+3000 events analyzed
+4000 events analyzed
+5000 events analyzed
+6000 events analyzed
+7000 events analyzed
+8000 events analyzed
+9000 events analyzed
+10000 events analyzed
+11000 events analyzed
+12000 events analyzed
+13000 events analyzed
+14000 events analyzed
+15000 events analyzed
+16000 events analyzed
+17000 events analyzed
+18000 events analyzed
+19000 events analyzed
+20000 events analyzed
+21000 events analyzed
+22000 events analyzed
+23000 events analyzed
+24000 events analyzed
+25000 events analyzed
+26000 events analyzed
+27000 events analyzed
+28000 events analyzed
+29000 events analyzed
+30000 events analyzed
+31000 events analyzed
+32000 events analyzed
+33000 events analyzed
+34000 events analyzed
+35000 events analyzed
+36000 events analyzed
+37000 events analyzed
+38000 events analyzed
+39000 events analyzed
+40000 events analyzed
+41000 events analyzed
+42000 events analyzed
+43000 events analyzed
+44000 events analyzed
+45000 events analyzed
+46000 events analyzed
+47000 events analyzed
+48000 events analyzed
+49000 events analyzed
+50000 events analyzed
+51000 events analyzed
+52000 events analyzed
+53000 events analyzed
+54000 events analyzed
+55000 events analyzed
+56000 events analyzed
+57000 events analyzed
+58000 events analyzed
+59000 events analyzed
+60000 events analyzed
+61000 events analyzed
+62000 events analyzed
+63000 events analyzed
+64000 events analyzed
+65000 events analyzed
+66000 events analyzed
+67000 events analyzed
+68000 events analyzed
+69000 events analyzed
+70000 events analyzed
+71000 events analyzed
+72000 events analyzed
+73000 events analyzed
+74000 events analyzed
+75000 events analyzed
+76000 events analyzed
+77000 events analyzed
+78000 events analyzed
+79000 events analyzed
+80000 events analyzed
+81000 events analyzed
+82000 events analyzed
+83000 events analyzed
+84000 events analyzed
+85000 events analyzed
+86000 events analyzed
+87000 events analyzed
+88000 events analyzed
+89000 events analyzed
+90000 events analyzed
+91000 events analyzed
+92000 events analyzed
+93000 events analyzed
+94000 events analyzed
+95000 events analyzed
+96000 events analyzed
+97000 events analyzed
+98000 events analyzed
+99000 events analyzed
+100000 events analyzed
+101000 events analyzed
+102000 events analyzed
+103000 events analyzed
+104000 events analyzed
+105000 events analyzed
+106000 events analyzed
+107000 events analyzed
+108000 events analyzed
+109000 events analyzed
+110000 events analyzed
+111000 events analyzed
+112000 events analyzed
+113000 events analyzed
+114000 events analyzed
+115000 events analyzed
+116000 events analyzed
+117000 events analyzed
+118000 events analyzed
+119000 events analyzed
+120000 events analyzed
+121000 events analyzed
+122000 events analyzed
+123000 events analyzed
+124000 events analyzed
+125000 events analyzed
+126000 events analyzed
+127000 events analyzed
+128000 events analyzed
+129000 events analyzed
+130000 events analyzed
+131000 events analyzed
+132000 events analyzed
+132314 total events
+writing histograms for muon fake estimates
+Done
+cp_and_run>  your program finished.
+cp_and_run>  your program made output.
+cp_and_run>  output files:
+  outputHist_data16.root
+
+cp_and_run>  ----  remove local copies of input files  ------------------
+cp_and_run>  removing local input files...
+cp_and_run>  rm -f f000_data16_13TeV_data16_13TeV.00307126.data16_13TeV.DAOD_SUSY5.root
+
+cp_and_run>  ----  copy the output files  -------------------------------
+cp_and_run>  copying your output...
+cp_and_run>  cp outputHist_data16.root /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/condor/data16_pileup_run_dir_201706181720/job_246
+
+cp_and_run>  ----  remove local copies of output files  -----------------
+cp_and_run>  removing local output files...
+cp_and_run>  rm -rf outputHist_data16.root
+
+cp_and_run>  files in the working directory now after deleting the copies:
+total 52K
+-rwx------. 1 sschier users    48 Jun 18 17:35 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 18 17:35 condor_exec.exe*
+-rw-r--r--. 1 sschier users  6.4K Jun 18 17:37 _condor_stdout
+-rw-r--r--. 1 condor  condor  13K Jun 18 17:35 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 18 17:35 .machine.ad
+
+cp_and_run>  done.

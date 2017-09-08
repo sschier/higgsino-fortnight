@@ -1,0 +1,78 @@
+cp_and_run>  ----  batch_utils/cp_and_run.main()  -----------------------
+cp_and_run>  ----  batch_utils/cp_and_run.get_input_files()  ----
+
+-------------------------------------------------------------------------
+cp_and_run>  user:         sschier
+cp_and_run>  exe:          /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py
+cp_and_run>  arg-template: " -input=%s -variation=pileup -isData=data16 -tree=CollectionTree -outfile=outputHist_data16.root"
+cp_and_run>  input_files:
+  /export/share/data/sschier/FakeLepton/June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data/data16_13TeV/June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data16_13TeV.00303499.physics_Main.merge.DAOD_SUSY5.f716_m1620_p2950.root
+-------------------------------------------------------------------------
+cp_and_run>  HOSTNAME (submitter):    atlas02.ucsc.edu
+cp_and_run>  hostname (this worker):  wrk4prv.ucsc.edu
+cp_and_run>  ip:  192.168.100.104
+cp_and_run>  id:  uid=1076(sschier) gid=100(users) groups=100(users) context=system_u:system_r:condor_startd_t:s0
+cp_and_run>  cwd: /var/lib/condor/execute/dir_1975019
+-------------------------------------------------------------------------
+
+cp_and_run>  ----  copy input files  ------------------------------------
+cp_and_run>  waiting for slot...
+[2017-06-18:15:49:39] INFO: _acquire_slot(queue_path, 0) by sschier
+cp_and_run>  got slot 0
+cp_and_run>  doing a copy (try 1)
+cp_and_run>  cp /export/share/data/sschier/FakeLepton/June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data/data16_13TeV/June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data16_13TeV.00303499.physics_Main.merge.DAOD_SUSY5.f716_m1620_p2950.root f000_data16_13TeV_June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data16_13TeV.00303499.physics_Main.merge.DAOD_SUSY5.f716_m1620_p2950.root
+cp_and_run>  copied successfully.
+cp_and_run>  releasing slot 0
+[2017-06-18:15:49:47] INFO: release_slot(queue_path, 0) by sschier
+cp_and_run>  files in the working directory now after copying:
+total 797M
+-rwx------. 1 sschier users    48 Jun 18 15:49 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 18 15:49 condor_exec.exe*
+-rw-r--r--. 1 sschier users  2.0K Jun 18 15:49 _condor_stdout
+-rwxr-xr-x. 1 sschier users  796M Jun 18 15:49 f000_data16_13TeV_June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data16_13TeV.00303499.physics_Main.merge.DAOD_SUSY5.f716_m1620_p2950.root*
+-rw-r--r--. 1 condor  condor  13K Jun 18 15:49 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 18 15:49 .machine.ad
+
+
+cp_and_run>  ----  run the program  -------------------------------------
+cp_and_run>  running your program...
+cp_and_run>  /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py  -input=f000_data16_13TeV_June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data16_13TeV.00303499.physics_Main.merge.DAOD_SUSY5.f716_m1620_p2950.root -variation=pileup -isData=data16 -tree=CollectionTree -outfile=outputHist_data16.root
+[?1034hStarting Analysis
+running over file f000_data16_13TeV_June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data16_13TeV.00303499.physics_Main.merge.DAOD_SUSY5.f716_m1620_p2950.root
+getting events in CollectionTree
+Traceback (most recent call last):
+  File "/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py", line 209, in <module>
+    main(sys.argv[1:])
+  File "/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py", line 202, in main
+    analyze(args.input,  args.tree, args.isData, args.isSignal, args.outfile, args.test, args.region, args.variation)   
+  File "/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py", line 143, in analyze
+    obs = observable(event, data)
+  File "/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/observables.py", line 11, in __init__
+    self.mt = event.mt/1000.
+AttributeError: 'TTree' object has no attribute 'mt'
+cp_and_run>  your program finished.
+cp_and_run>  your program made output.
+cp_and_run>  output files:
+  outputHist_data16.root
+
+cp_and_run>  ----  remove local copies of input files  ------------------
+cp_and_run>  removing local input files...
+cp_and_run>  rm -f f000_data16_13TeV_June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data16_13TeV.00303499.physics_Main.merge.DAOD_SUSY5.f716_m1620_p2950.root
+
+cp_and_run>  ----  copy the output files  -------------------------------
+cp_and_run>  copying your output...
+cp_and_run>  cp outputHist_data16.root /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/condor/data16_pileup_run_dir_201706181542/job_059
+
+cp_and_run>  ----  remove local copies of output files  -----------------
+cp_and_run>  removing local output files...
+cp_and_run>  rm -rf outputHist_data16.root
+
+cp_and_run>  files in the working directory now after deleting the copies:
+total 52K
+-rwx------. 1 sschier users    48 Jun 18 15:49 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 18 15:49 condor_exec.exe*
+-rw-r--r--. 1 sschier users  4.7K Jun 18 15:49 _condor_stdout
+-rw-r--r--. 1 condor  condor  13K Jun 18 15:49 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 18 15:49 .machine.ad
+
+cp_and_run>  done.

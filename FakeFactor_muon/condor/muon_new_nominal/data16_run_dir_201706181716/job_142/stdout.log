@@ -1,0 +1,493 @@
+cp_and_run>  ----  batch_utils/cp_and_run.main()  -----------------------
+cp_and_run>  ----  batch_utils/cp_and_run.get_input_files()  ----
+
+-------------------------------------------------------------------------
+cp_and_run>  user:         sschier
+cp_and_run>  exe:          /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py
+cp_and_run>  arg-template: " -input=%s -isData=data16 -tree=CollectionTree -outfile=outputHist_data16.root"
+cp_and_run>  input_files:
+  /export/share/data/sschier/FakeLepton/full_samples_2_4_25/data16_13TeV/data16_13TeV.00311244.data16_13TeV.DAOD_SUSY5.root
+-------------------------------------------------------------------------
+cp_and_run>  HOSTNAME (submitter):    atlas02.ucsc.edu
+cp_and_run>  hostname (this worker):  wrk5prv.ucsc.edu
+cp_and_run>  ip:  192.168.100.105
+cp_and_run>  id:  uid=1076(sschier) gid=100(users) groups=100(users) context=system_u:system_r:condor_startd_t:s0
+cp_and_run>  cwd: /var/lib/condor/execute/dir_787795
+-------------------------------------------------------------------------
+
+cp_and_run>  ----  copy input files  ------------------------------------
+cp_and_run>  waiting for slot...
+[2017-06-18:17:21:56] INFO: _acquire_slot(queue_path, 6) by sschier
+cp_and_run>  got slot 6
+cp_and_run>  doing a copy (try 1)
+cp_and_run>  cp /export/share/data/sschier/FakeLepton/full_samples_2_4_25/data16_13TeV/data16_13TeV.00311244.data16_13TeV.DAOD_SUSY5.root f000_data16_13TeV_data16_13TeV.00311244.data16_13TeV.DAOD_SUSY5.root
+cp_and_run>  copied successfully.
+cp_and_run>  releasing slot 6
+[2017-06-18:17:22:08] INFO: release_slot(queue_path, 6) by sschier
+cp_and_run>  files in the working directory now after copying:
+total 317M
+-rwx------. 1 sschier users    48 Jun 18 17:21 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 18 17:21 condor_exec.exe*
+-rw-r--r--. 1 sschier users  1.7K Jun 18 17:22 _condor_stdout
+-rwxr-xr-x. 1 sschier users  317M Jun 18 17:22 f000_data16_13TeV_data16_13TeV.00311244.data16_13TeV.DAOD_SUSY5.root*
+-rw-r--r--. 1 condor  condor  13K Jun 18 17:21 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 18 17:21 .machine.ad
+
+
+cp_and_run>  ----  run the program  -------------------------------------
+cp_and_run>  running your program...
+cp_and_run>  /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py  -input=f000_data16_13TeV_data16_13TeV.00311244.data16_13TeV.DAOD_SUSY5.root -isData=data16 -tree=CollectionTree -outfile=outputHist_data16.root
+[?1034hStarting Analysis
+running over file f000_data16_13TeV_data16_13TeV.00311244.data16_13TeV.DAOD_SUSY5.root
+getting events in CollectionTree
+1000 events analyzed
+2000 events analyzed
+3000 events analyzed
+4000 events analyzed
+5000 events analyzed
+6000 events analyzed
+7000 events analyzed
+8000 events analyzed
+9000 events analyzed
+10000 events analyzed
+11000 events analyzed
+12000 events analyzed
+13000 events analyzed
+14000 events analyzed
+15000 events analyzed
+16000 events analyzed
+17000 events analyzed
+18000 events analyzed
+19000 events analyzed
+20000 events analyzed
+21000 events analyzed
+22000 events analyzed
+23000 events analyzed
+24000 events analyzed
+25000 events analyzed
+26000 events analyzed
+27000 events analyzed
+28000 events analyzed
+29000 events analyzed
+30000 events analyzed
+31000 events analyzed
+32000 events analyzed
+33000 events analyzed
+34000 events analyzed
+35000 events analyzed
+36000 events analyzed
+37000 events analyzed
+38000 events analyzed
+39000 events analyzed
+40000 events analyzed
+41000 events analyzed
+42000 events analyzed
+43000 events analyzed
+44000 events analyzed
+45000 events analyzed
+46000 events analyzed
+47000 events analyzed
+48000 events analyzed
+49000 events analyzed
+50000 events analyzed
+51000 events analyzed
+52000 events analyzed
+53000 events analyzed
+54000 events analyzed
+55000 events analyzed
+56000 events analyzed
+57000 events analyzed
+58000 events analyzed
+59000 events analyzed
+60000 events analyzed
+61000 events analyzed
+62000 events analyzed
+63000 events analyzed
+64000 events analyzed
+65000 events analyzed
+66000 events analyzed
+67000 events analyzed
+68000 events analyzed
+69000 events analyzed
+70000 events analyzed
+71000 events analyzed
+72000 events analyzed
+73000 events analyzed
+74000 events analyzed
+75000 events analyzed
+76000 events analyzed
+77000 events analyzed
+78000 events analyzed
+79000 events analyzed
+80000 events analyzed
+81000 events analyzed
+82000 events analyzed
+83000 events analyzed
+84000 events analyzed
+85000 events analyzed
+86000 events analyzed
+87000 events analyzed
+88000 events analyzed
+89000 events analyzed
+90000 events analyzed
+91000 events analyzed
+92000 events analyzed
+93000 events analyzed
+94000 events analyzed
+95000 events analyzed
+96000 events analyzed
+97000 events analyzed
+98000 events analyzed
+99000 events analyzed
+100000 events analyzed
+101000 events analyzed
+102000 events analyzed
+103000 events analyzed
+104000 events analyzed
+105000 events analyzed
+106000 events analyzed
+107000 events analyzed
+108000 events analyzed
+109000 events analyzed
+110000 events analyzed
+111000 events analyzed
+112000 events analyzed
+113000 events analyzed
+114000 events analyzed
+115000 events analyzed
+116000 events analyzed
+117000 events analyzed
+118000 events analyzed
+119000 events analyzed
+120000 events analyzed
+121000 events analyzed
+122000 events analyzed
+123000 events analyzed
+124000 events analyzed
+125000 events analyzed
+126000 events analyzed
+127000 events analyzed
+128000 events analyzed
+129000 events analyzed
+130000 events analyzed
+131000 events analyzed
+132000 events analyzed
+133000 events analyzed
+134000 events analyzed
+135000 events analyzed
+136000 events analyzed
+137000 events analyzed
+138000 events analyzed
+139000 events analyzed
+140000 events analyzed
+141000 events analyzed
+142000 events analyzed
+143000 events analyzed
+144000 events analyzed
+145000 events analyzed
+146000 events analyzed
+147000 events analyzed
+148000 events analyzed
+149000 events analyzed
+150000 events analyzed
+151000 events analyzed
+152000 events analyzed
+153000 events analyzed
+154000 events analyzed
+155000 events analyzed
+156000 events analyzed
+157000 events analyzed
+158000 events analyzed
+159000 events analyzed
+160000 events analyzed
+161000 events analyzed
+162000 events analyzed
+163000 events analyzed
+164000 events analyzed
+165000 events analyzed
+166000 events analyzed
+167000 events analyzed
+168000 events analyzed
+169000 events analyzed
+170000 events analyzed
+171000 events analyzed
+172000 events analyzed
+173000 events analyzed
+174000 events analyzed
+175000 events analyzed
+176000 events analyzed
+177000 events analyzed
+178000 events analyzed
+179000 events analyzed
+180000 events analyzed
+181000 events analyzed
+182000 events analyzed
+183000 events analyzed
+184000 events analyzed
+185000 events analyzed
+186000 events analyzed
+187000 events analyzed
+188000 events analyzed
+189000 events analyzed
+190000 events analyzed
+191000 events analyzed
+192000 events analyzed
+193000 events analyzed
+194000 events analyzed
+195000 events analyzed
+196000 events analyzed
+197000 events analyzed
+198000 events analyzed
+199000 events analyzed
+200000 events analyzed
+201000 events analyzed
+202000 events analyzed
+203000 events analyzed
+204000 events analyzed
+205000 events analyzed
+206000 events analyzed
+207000 events analyzed
+208000 events analyzed
+209000 events analyzed
+210000 events analyzed
+211000 events analyzed
+212000 events analyzed
+213000 events analyzed
+214000 events analyzed
+215000 events analyzed
+216000 events analyzed
+217000 events analyzed
+218000 events analyzed
+219000 events analyzed
+220000 events analyzed
+221000 events analyzed
+222000 events analyzed
+223000 events analyzed
+224000 events analyzed
+225000 events analyzed
+226000 events analyzed
+227000 events analyzed
+228000 events analyzed
+229000 events analyzed
+230000 events analyzed
+231000 events analyzed
+232000 events analyzed
+233000 events analyzed
+234000 events analyzed
+235000 events analyzed
+236000 events analyzed
+237000 events analyzed
+238000 events analyzed
+239000 events analyzed
+240000 events analyzed
+241000 events analyzed
+242000 events analyzed
+243000 events analyzed
+244000 events analyzed
+245000 events analyzed
+246000 events analyzed
+247000 events analyzed
+248000 events analyzed
+249000 events analyzed
+250000 events analyzed
+251000 events analyzed
+252000 events analyzed
+253000 events analyzed
+254000 events analyzed
+255000 events analyzed
+256000 events analyzed
+257000 events analyzed
+258000 events analyzed
+259000 events analyzed
+260000 events analyzed
+261000 events analyzed
+262000 events analyzed
+263000 events analyzed
+264000 events analyzed
+265000 events analyzed
+266000 events analyzed
+267000 events analyzed
+268000 events analyzed
+269000 events analyzed
+270000 events analyzed
+271000 events analyzed
+272000 events analyzed
+273000 events analyzed
+274000 events analyzed
+275000 events analyzed
+276000 events analyzed
+277000 events analyzed
+278000 events analyzed
+279000 events analyzed
+280000 events analyzed
+281000 events analyzed
+282000 events analyzed
+283000 events analyzed
+284000 events analyzed
+285000 events analyzed
+286000 events analyzed
+287000 events analyzed
+288000 events analyzed
+289000 events analyzed
+290000 events analyzed
+291000 events analyzed
+292000 events analyzed
+293000 events analyzed
+294000 events analyzed
+295000 events analyzed
+296000 events analyzed
+297000 events analyzed
+298000 events analyzed
+299000 events analyzed
+300000 events analyzed
+301000 events analyzed
+302000 events analyzed
+303000 events analyzed
+304000 events analyzed
+305000 events analyzed
+306000 events analyzed
+307000 events analyzed
+308000 events analyzed
+309000 events analyzed
+310000 events analyzed
+311000 events analyzed
+312000 events analyzed
+313000 events analyzed
+314000 events analyzed
+315000 events analyzed
+316000 events analyzed
+317000 events analyzed
+318000 events analyzed
+319000 events analyzed
+320000 events analyzed
+321000 events analyzed
+322000 events analyzed
+323000 events analyzed
+324000 events analyzed
+325000 events analyzed
+326000 events analyzed
+327000 events analyzed
+328000 events analyzed
+329000 events analyzed
+330000 events analyzed
+331000 events analyzed
+332000 events analyzed
+333000 events analyzed
+334000 events analyzed
+335000 events analyzed
+336000 events analyzed
+337000 events analyzed
+338000 events analyzed
+339000 events analyzed
+340000 events analyzed
+341000 events analyzed
+342000 events analyzed
+343000 events analyzed
+344000 events analyzed
+345000 events analyzed
+346000 events analyzed
+347000 events analyzed
+348000 events analyzed
+349000 events analyzed
+350000 events analyzed
+351000 events analyzed
+352000 events analyzed
+353000 events analyzed
+354000 events analyzed
+355000 events analyzed
+356000 events analyzed
+357000 events analyzed
+358000 events analyzed
+359000 events analyzed
+360000 events analyzed
+361000 events analyzed
+362000 events analyzed
+363000 events analyzed
+364000 events analyzed
+365000 events analyzed
+366000 events analyzed
+367000 events analyzed
+368000 events analyzed
+369000 events analyzed
+370000 events analyzed
+371000 events analyzed
+372000 events analyzed
+373000 events analyzed
+374000 events analyzed
+375000 events analyzed
+376000 events analyzed
+377000 events analyzed
+378000 events analyzed
+379000 events analyzed
+380000 events analyzed
+381000 events analyzed
+382000 events analyzed
+383000 events analyzed
+384000 events analyzed
+385000 events analyzed
+386000 events analyzed
+387000 events analyzed
+388000 events analyzed
+389000 events analyzed
+390000 events analyzed
+391000 events analyzed
+392000 events analyzed
+393000 events analyzed
+394000 events analyzed
+395000 events analyzed
+396000 events analyzed
+397000 events analyzed
+398000 events analyzed
+399000 events analyzed
+400000 events analyzed
+401000 events analyzed
+402000 events analyzed
+403000 events analyzed
+404000 events analyzed
+405000 events analyzed
+406000 events analyzed
+407000 events analyzed
+408000 events analyzed
+409000 events analyzed
+410000 events analyzed
+411000 events analyzed
+412000 events analyzed
+413000 events analyzed
+414000 events analyzed
+415000 events analyzed
+416000 events analyzed
+417000 events analyzed
+418000 events analyzed
+419000 events analyzed
+420000 events analyzed
+421000 events analyzed
+422000 events analyzed
+422757 total events
+writing histograms for muon fake estimates
+Done
+cp_and_run>  your program finished.
+cp_and_run>  your program made output.
+cp_and_run>  output files:
+  outputHist_data16.root
+
+cp_and_run>  ----  remove local copies of input files  ------------------
+cp_and_run>  removing local input files...
+cp_and_run>  rm -f f000_data16_13TeV_data16_13TeV.00311244.data16_13TeV.DAOD_SUSY5.root
+
+cp_and_run>  ----  copy the output files  -------------------------------
+cp_and_run>  copying your output...
+cp_and_run>  cp outputHist_data16.root /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/condor/data16_run_dir_201706181716/job_142
+
+cp_and_run>  ----  remove local copies of output files  -----------------
+cp_and_run>  removing local output files...
+cp_and_run>  rm -rf outputHist_data16.root
+
+cp_and_run>  files in the working directory now after deleting the copies:
+total 60K
+-rwx------. 1 sschier users    48 Jun 18 17:21 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 18 17:21 condor_exec.exe*
+-rw-r--r--. 1 sschier users   13K Jun 18 17:29 _condor_stdout
+-rw-r--r--. 1 condor  condor  13K Jun 18 17:21 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 18 17:21 .machine.ad
+
+cp_and_run>  done.

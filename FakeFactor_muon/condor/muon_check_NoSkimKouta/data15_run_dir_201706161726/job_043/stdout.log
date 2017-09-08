@@ -1,0 +1,73 @@
+cp_and_run>  ----  batch_utils/cp_and_run.main()  -----------------------
+cp_and_run>  ----  batch_utils/cp_and_run.get_input_files()  ----
+
+-------------------------------------------------------------------------
+cp_and_run>  user:         sschier
+cp_and_run>  exe:          /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py
+cp_and_run>  arg-template: " -input=%s -isData=data15 -tree=CollectionTree -outfile=outputHist_data15.root"
+cp_and_run>  input_files:
+  /export/share/data/sschier/FakeLepton/full_samples_2_4_25/data15_13TeV/data15_13TeV.00281075.data15_13TeV.DAOD_SUSY5.root
+-------------------------------------------------------------------------
+cp_and_run>  HOSTNAME (submitter):    atlas02.ucsc.edu
+cp_and_run>  hostname (this worker):  wrk1prv.ucsc.edu
+cp_and_run>  ip:  192.168.100.101
+cp_and_run>  id:  uid=1076(sschier) gid=100(users) groups=100(users) context=system_u:system_r:condor_startd_t:s0
+cp_and_run>  cwd: /var/lib/condor/execute/dir_574356
+-------------------------------------------------------------------------
+
+cp_and_run>  ----  copy input files  ------------------------------------
+cp_and_run>  waiting for slot...
+[2017-06-16:17:36:56] INFO: _acquire_slot(queue_path, 0) by sschier
+cp_and_run>  got slot 0
+cp_and_run>  doing a copy (try 1)
+cp_and_run>  cp /export/share/data/sschier/FakeLepton/full_samples_2_4_25/data15_13TeV/data15_13TeV.00281075.data15_13TeV.DAOD_SUSY5.root f000_data15_13TeV_data15_13TeV.00281075.data15_13TeV.DAOD_SUSY5.root
+cp_and_run>  copied successfully.
+cp_and_run>  releasing slot 0
+[2017-06-16:17:36:56] INFO: release_slot(queue_path, 0) by sschier
+cp_and_run>  files in the working directory now after copying:
+total 2.9M
+-rwx------. 1 sschier users    48 Jun 16 17:36 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 16 17:36 condor_exec.exe*
+-rw-r--r--. 1 sschier users  1.7K Jun 16 17:36 _condor_stdout
+-rwxr-xr-x. 1 sschier users  2.9M Jun 16 17:36 f000_data15_13TeV_data15_13TeV.00281075.data15_13TeV.DAOD_SUSY5.root*
+-rw-r--r--. 1 condor  condor  17K Jun 16 17:36 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 16 17:36 .machine.ad
+
+
+cp_and_run>  ----  run the program  -------------------------------------
+cp_and_run>  running your program...
+cp_and_run>  /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py  -input=f000_data15_13TeV_data15_13TeV.00281075.data15_13TeV.DAOD_SUSY5.root -isData=data15 -tree=CollectionTree -outfile=outputHist_data15.root
+[?1034hStarting Analysis
+running over file f000_data15_13TeV_data15_13TeV.00281075.data15_13TeV.DAOD_SUSY5.root
+getting events in CollectionTree
+1000 events analyzed
+2000 events analyzed
+2176 total events
+writing histograms for muon fake estimates
+Done
+cp_and_run>  your program finished.
+cp_and_run>  your program made output.
+cp_and_run>  output files:
+  outputHist_data15.root
+
+cp_and_run>  ----  remove local copies of input files  ------------------
+cp_and_run>  removing local input files...
+cp_and_run>  rm -f f000_data15_13TeV_data15_13TeV.00281075.data15_13TeV.DAOD_SUSY5.root
+
+cp_and_run>  ----  copy the output files  -------------------------------
+cp_and_run>  copying your output...
+cp_and_run>  cp outputHist_data15.root /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/condor/data15_run_dir_201706161726/job_043
+
+cp_and_run>  ----  remove local copies of output files  -----------------
+cp_and_run>  removing local output files...
+cp_and_run>  rm -rf outputHist_data15.root
+
+cp_and_run>  files in the working directory now after deleting the copies:
+total 52K
+-rwx------. 1 sschier users    48 Jun 16 17:36 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 16 17:36 condor_exec.exe*
+-rw-r--r--. 1 sschier users  3.6K Jun 16 17:37 _condor_stdout
+-rw-r--r--. 1 condor  condor  17K Jun 16 17:36 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 16 17:36 .machine.ad
+
+cp_and_run>  done.

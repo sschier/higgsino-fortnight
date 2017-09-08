@@ -1,0 +1,66 @@
+cp_and_run>  ----  batch_utils/cp_and_run.main()  -----------------------
+cp_and_run>  ----  batch_utils/cp_and_run.get_input_files()  ----
+
+-------------------------------------------------------------------------
+cp_and_run>  user:         sschier
+cp_and_run>  exe:          /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py
+cp_and_run>  arg-template: " -input=%s -variation=pileup -isData=data15 -tree=CollectionTree -outfile=outputHist_data15.root"
+cp_and_run>  input_files:
+  /export/share/data/sschier/FakeLepton/full_samples_2_4_25/data15_13TeV/Analysis.00279169.log
+-------------------------------------------------------------------------
+cp_and_run>  HOSTNAME (submitter):    atlas02.ucsc.edu
+cp_and_run>  hostname (this worker):  wrk0prv.ucsc.edu
+cp_and_run>  ip:  192.168.100.100
+cp_and_run>  id:  uid=1076(sschier) gid=100(users) groups=100(users) context=unconfined_u:system_r:condor_startd_t:s0
+cp_and_run>  cwd: /var/lib/condor/execute/dir_492092
+-------------------------------------------------------------------------
+
+cp_and_run>  ----  copy input files  ------------------------------------
+cp_and_run>  waiting for slot...
+[2017-06-18:17:42:24] INFO: _acquire_slot(queue_path, 0) by sschier
+cp_and_run>  got slot 0
+cp_and_run>  doing a copy (try 1)
+cp_and_run>  cp /export/share/data/sschier/FakeLepton/full_samples_2_4_25/data15_13TeV/Analysis.00279169.log f000_data15_13TeV_Analysis.00279169.log
+cp_and_run>  copied successfully.
+cp_and_run>  releasing slot 0
+[2017-06-18:17:42:24] INFO: release_slot(queue_path, 0) by sschier
+cp_and_run>  files in the working directory now after copying:
+total 52K
+-rwx------. 1 sschier users    47 Jun 18 17:42 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 18 17:42 condor_exec.exe*
+-rw-r--r--. 1 sschier users  1.7K Jun 18 17:42 _condor_stdout
+-rwxr-xr-x. 1 sschier users  1.2K Jun 18 17:42 f000_data15_13TeV_Analysis.00279169.log*
+-rw-r--r--. 1 condor  condor  13K Jun 18 17:42 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 18 17:42 .machine.ad
+
+
+cp_and_run>  ----  run the program  -------------------------------------
+cp_and_run>  running your program...
+cp_and_run>  /export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py  -input=f000_data15_13TeV_Analysis.00279169.log -variation=pileup -isData=data15 -tree=CollectionTree -outfile=outputHist_data15.root
+Error in <TFile::Init>: f000_data15_13TeV_Analysis.00279169.log not a ROOT file
+[?1034hStarting Analysis
+running over file f000_data15_13TeV_Analysis.00279169.log
+Traceback (most recent call last):
+  File "/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py", line 209, in <module>
+    main(sys.argv[1:])
+  File "/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py", line 202, in main
+    analyze(args.input,  args.tree, args.isData, args.isSignal, args.outfile, args.test, args.region, args.variation)   
+  File "/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_muon/FFMaker.py", line 85, in analyze
+    print 'getting events in %s' % t.GetName()
+ReferenceError: attempt to access a null-pointer
+cp_and_run>  your program finished.
+
+cp_and_run>  ----  remove local copies of input files  ------------------
+cp_and_run>  removing local input files...
+cp_and_run>  rm -f f000_data15_13TeV_Analysis.00279169.log
+
+
+cp_and_run>  files in the working directory now after deleting the copies:
+total 48K
+-rwx------. 1 sschier users    47 Jun 18 17:42 .chirp.config*
+-rwxr-xr-x. 1 sschier users   15K Jun 18 17:42 condor_exec.exe*
+-rw-r--r--. 1 sschier users  3.4K Jun 18 17:42 _condor_stdout
+-rw-r--r--. 1 condor  condor  13K Jun 18 17:42 .job.ad
+-rw-r--r--. 1 condor  condor 5.0K Jun 18 17:42 .machine.ad
+
+cp_and_run>  done.

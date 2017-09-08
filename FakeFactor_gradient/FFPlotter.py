@@ -9,7 +9,8 @@ import math
 from functions import *
 
 #GLOBAL VARIABLES
-logYAxis = True
+logYAxis = False
+#logYAxis = True
 
 #ATLAS STYLE
 ROOT.gROOT.LoadMacro("/export/home/sschier/workarea/atlasstyle-00-03-05/AtlasUtils.C")
@@ -174,37 +175,70 @@ def SumMCHists(hist_list, lumi, debug):
 def MakeDataStack(hist_list, lumi, debug):
     hs = ROOT.THStack("hist stack", "hist stack")
     hsum = SumMCHists(hist_list, lumi, debug)
-    maxVal = hsum.GetBinContent(hsum.GetMaximumBin())*1000000*lumi
-    minVal = 1.
+    #make list of hsum bin content to normalize stack hists
+    sum_bin_list = []
+    norm_hist_dict = {}
+    for x in xrange(1, hsum.GetNbinsX()+1):
+        if hsum.GetBinContent(x) == 0.0:
+            sum_bin_list.append(1.0)
+        else:
+            sum_bin_list.append(hsum.GetBinContent(x))
+    #clone deco_hists to normalize
+    for key in hist_list:
+        hist_list[key].SetDirectory(0)
+        norm_hist_dict[key] = copy.deepcopy(hist_list[key])
+        norm_hist_dict[key].SetDirectory(0)
+        for s, x in zip(sum_bin_list, xrange(1, len(sum_bin_list)+1)):
+            norm_hist_dict[key].SetBinContent(x, norm_hist_dict[key].GetBinContent(x)/s)
+
+    sum_1 = 0.0
+    print sum_bin_list
+    for key in hist_list:
+        print key
+        for x in xrange(1, len(sum_bin_list)+1):
+            print hist_list[key].GetBinContent(x)
+            print norm_hist_dict[key].GetBinContent(x)
+            if x is 1:
+                sum_1 += norm_hist_dict[key].GetBinContent(x)
+    print "Sum of bin 1 = %f" % sum_1
+    #maxVal = hsum.GetBinContent(hsum.GetMaximumBin())
+    maxVal = 1.7
+    #minVal = 0.
     sortedHistTuple = sorted(hist_list.items(), key=lambda x: x[1].GetBinContent(x[1].GetMaximumBin()))
+    sortedNormTuple = sorted(norm_hist_dict.items(), key=lambda x: x[1].GetBinContent(x[1].GetMaximumBin()))
     if debug:
         print maxVal
         print 'in Data Stack'
         print hist_list
         print sortedHistTuple
-    sortedKeyList = sorted(hist_list.keys())
+    #sortedKeyList = sorted(hist_list.keys())
+    sortedKeyList = sorted(norm_hist_dict.keys())
     #colors = [40, 41, 42, 46, 49, 31, 38, 15]
     colors = [5, 3, 8, 2, 4, 7, 9, 51, 6]  #[yellow, Lgreen, Dgreen, red, blue, cyan, indigo, purple, magenta]
     markers = [33, 34, 20, 21, 29, 31, 23, 26, 25]     #[diamond, cross, circle, square, star, cross-hair, triangleup, opentriangledown, open-square
     colormap = {}
     markermap = {}
     for k, c, m in zip(sortedKeyList, colors, markers):
+        print k
         colormap[k] = c
         markermap[k] = m
-    if debug: print colormap
+    print colormap
 
-    for h in sortedHistTuple:
+    for h, n in zip(sortedHistTuple, sortedNormTuple):
         if debug: print "adding hist to stack"
         #hist = h.Clone("hist")
         h[1].SetFillColor(colormap[h[0]])
         h[1].SetMarkerColor(colormap[h[0]])
         h[1].SetMarkerStyle(markermap[h[0]])
-        h[1].SetMarkerSize(0)
-        h[1].Scale(lumi)
-        h[1].SetDirectory(0)
-        hs.Add(h[1])
+        n[1].SetFillColor(colormap[n[0]])
+        n[1].SetMarkerColor(colormap[n[0]])
+        n[1].SetMarkerStyle(markermap[n[0]])
+        n[1].SetMarkerSize(0)
+        n[1].Scale(lumi)
+        n[1].SetDirectory(0)
+        hs.Add(n[1])
     hs.SetMaximum(maxVal)
-    hs.SetMinimum(minVal)
+    hs.SetMinimum(.0001)
     return hs
 
 #======================================================================
@@ -323,6 +357,30 @@ def MakeLegend(bkgndHists, dataHist, region):
     return l
 
 #======================================================================
+def MakeDecoRatio(topHist, bottomHist, debug):
+    if debug:
+        print '**debuging ratio plot'
+        print bottomHist.GetBinContent(bottomHist.GetMaximumBin())
+        print topHist.GetBinContent(topHist.GetMaximumBin())
+    rh = copy.deepcopy(topHist)
+    rh.SetDirectory(0)
+    rh.Divide(bottomHist)
+    rh.SetMinimum(0)
+    rh.SetMaximum(2)
+    if debug: print topHist.GetXaxis().GetTitle()
+    rh.GetXaxis().SetTitle(str(topHist.GetXaxis().GetTitle()))
+    rh.GetXaxis().SetLabelSize(0.12)
+    rh.GetYaxis().SetLabelSize(0.12)
+    rh.GetYaxis().SetNdivisions(8)
+    rh.GetXaxis().SetTitleSize(0.16)
+    rh.GetYaxis().SetTitleSize(0.16)
+    rh.GetXaxis().SetTitleOffset(0.9)
+    rh.GetYaxis().SetTitleOffset(0.39)
+    rh.GetYaxis().SetTitle("Data/MC")
+
+
+    return rh
+#======================================================================
 def MakeNewRatio(topHist, bottomHist, debug):
     if debug:
         print '**debuging ratio plot'
@@ -361,17 +419,7 @@ def plotDeco(lumi, region, var, indir, debug):
     if debug: print "opening output file"
     o=ROOT.TFile("test.root", "RECREATE")
     if debug: print "Getting MC list"
-    if var == 'AntiIDelPt':
-        data_path = 'FFAIDSR/FFAIDSR_FFAIDSR/h_FFAIDSR_FFAIDSR_%s' % var
-        deco_path_list = []
-        deco_path_list.append('AID1/AID1_FFAIDSR/h_AID1_FFAIDSR_%s' % var)
-        deco_path_list.append('AID2/AID2_FFAIDSR/h_AID2_FFAIDSR_%s' % var)
-        deco_path_list.append('AID3/AID3_FFAIDSR/h_AID3_FFAIDSR_%s' % var)
-        deco_path_list.append('AID12/AID12_FFAIDSR/h_AID12_FFAIDSR_%s' % var)
-        deco_path_list.append('AID13/AID13_FFAIDSR/h_AID13_FFAIDSR_%s' % var)
-        deco_path_list.append('AID23/AID23_FFAIDSR/h_AID23_FFAIDSR_%s' % var)
-        deco_path_list.append('AID123/AID123_FFAIDSR/h_AID123_FFAIDSR_%s' % var)
-    else:
+    if( var == 'Mt' or var == 'MET' ):
         deco_path_list = []
         data_path = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_%s' % var
         deco_path_list.append('AID1/AID1_FFAID/h_AID1_FFAID_%s' % var)
@@ -381,6 +429,16 @@ def plotDeco(lumi, region, var, indir, debug):
         deco_path_list.append('AID13/AID13_FFAID/h_AID13_FFAID_%s' % var)
         deco_path_list.append('AID23/AID23_FFAID/h_AID23_FFAID_%s' % var)
         deco_path_list.append('AID123/AID123_FFAID/h_AID123_FFAID_%s' % var)
+    else:
+        data_path = 'FFAIDSR/FFAIDSR_FFAIDSR/h_FFAIDSR_FFAIDSR_%s' % var
+        deco_path_list = []
+        deco_path_list.append('AID1/AID1_FFAIDSR/h_AID1_FFAIDSR_%s' % var)
+        deco_path_list.append('AID2/AID2_FFAIDSR/h_AID2_FFAIDSR_%s' % var)
+        deco_path_list.append('AID3/AID3_FFAIDSR/h_AID3_FFAIDSR_%s' % var)
+        deco_path_list.append('AID12/AID12_FFAIDSR/h_AID12_FFAIDSR_%s' % var)
+        deco_path_list.append('AID13/AID13_FFAIDSR/h_AID13_FFAIDSR_%s' % var)
+        deco_path_list.append('AID23/AID23_FFAIDSR/h_AID23_FFAIDSR_%s' % var)
+        deco_path_list.append('AID123/AID123_FFAIDSR/h_AID123_FFAIDSR_%s' % var)
 
     deco_name_list = []
     deco_name_list.append('fail_ID')
@@ -399,28 +457,37 @@ def plotDeco(lumi, region, var, indir, debug):
     if debug: print "Making deco hist stack"
     m_dstack = MakeDataStack(deco_hist_list, lumi,  debug)
     m_dsum = SumMCHists(deco_hist_list, lumi, debug)
-    m_ratio = MakeNewRatio(m_data, m_dsum, debug)
+    m_ratio = MakeDecoRatio(m_data, m_dsum, debug)
     m_legend = MakeLegend(deco_hist_list, m_data, region)
+    sum_bin_list = []
+    for x in xrange(1, m_dsum.GetNbinsX()+1):
+        if m_dsum.GetBinContent(x) == 0.0:
+            sum_bin_list.append(1.0)
+        else:
+            sum_bin_list.append(m_dsum.GetBinContent(x))
+    #clone data hist to normalize
+    m_data.SetDirectory(0)
+    norm_data = copy.deepcopy(m_data)
+    norm_data.SetDirectory(0)
+    for s, x in zip(sum_bin_list, xrange(1, len(sum_bin_list)+1)):
+        norm_data.SetBinContent(x, m_data.GetBinContent(x)/s)
 
-    #canvas, p1 = SetSingleCanvas('canvas', region)
     canvas, p1, p2 = SetRatioCanvas('deco', region, var)
     p2.cd()
     m_ratio.Draw("P")
     p1.cd()
     m_dstack.Draw("HIST")
-    m_data.Draw("HSAME")
-    #m_data.Draw("PESAME")
+    norm_data.Draw("HIST SAME")
     o.cd()
-    #m_hstack.Write()
     canvas.Write()
     canvas.cd()
     m_legend.Draw()
     ROOT.gStyle.SetLegendBorderSize(0)
     ROOT.gROOT.ForceStyle()
-    #ROOT.myText(       0.41,  0.85, 1, "2.5fb^{-1}@ #sqrt{s}= 13 TeV")
+    ROOT.myText(       0.21,  0.85, 1, "#sqrt{s}= 13 TeV, 10.0 pb^{-1}")
     #ROOT.myText(       0.41,  0.80, 1, "data16PeriodK")
     #ROOT.myText(       0.41,  0.85, 1, "%s" % region)
-    ROOT.ATLASLabel(0.41,0.90,"Internal")
+    ROOT.ATLASLabel(0.21,0.90,"Internal")
     #raw_input("-->")
     canvas.Print('%s_%s.pdf' % (region, var))
     canvas.Close()
