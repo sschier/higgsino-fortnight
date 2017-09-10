@@ -24,15 +24,15 @@ def FFIDSR(event, hc, IDCuts, elList, Z0list, D0list, variation):
     nlep_fill = 0
     nlepSR_fill = 0
     for CutsDict, el, z0, d0 in zip(IDCuts, elList, Z0list, D0list):
-        if(CutsDict["HLT_e5"]):
-            hc.fill(event, "HLTe5", el, z0, d0, variation)
-        if(CutsDict["HLT_e10"]):
-            hc.fill(event, "HLTe10", el, z0, d0, variation)
-        if(CutsDict["HLT_e15"]):
-            hc.fill(event, "HLTe15", el, z0, d0, variation)
-        if(CutsDict["HLT_e20"] ):
-            hc.fill(event, "HLTe20", el, z0, d0, variation)
-        if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+        #if(CutsDict["HLT_e5"]):
+        #    hc.fill(event, "HLTe5", el, z0, d0, variation)
+        #if(CutsDict["HLT_e10"]):
+        #    hc.fill(event, "HLTe10", el, z0, d0, variation)
+        #if(CutsDict["HLT_e15"]):
+        #    hc.fill(event, "HLTe15", el, z0, d0, variation)
+        #if(CutsDict["HLT_e20"] ):
+        #    hc.fill(event, "HLTe20", el, z0, d0, variation)
+        if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
             #print "filling ID lep w/ Pt %f" % el.Pt()
             nlep_fill += 1
             hc.fill(event, "FFID", el, z0, d0, variation)
@@ -48,10 +48,10 @@ def FFIDSR(event, hc, IDCuts, elList, Z0list, D0list, variation):
                 if( CutsDict["40mt"] ):
                     nlepSR_fill += 1
                     hc.fill(event, "FFIDSR", el, z0, d0, variation)
-    if len(elList):
-        hc.fillN(event, "FFIDN", elList[0], nlep, variation)
-        hc.fillN(event, "FFIDNfill", elList[0], nlep_fill, variation)
-        hc.fillN(event, "FFIDSRNfill", elList[0], nlepSR_fill, variation)
+    #if len(elList):
+    #    hc.fillN(event, "FFIDN", elList[0], nlep, variation)
+    #    hc.fillN(event, "FFIDNfill", elList[0], nlep_fill, variation)
+    #    hc.fillN(event, "FFIDSRNfill", elList[0], nlepSR_fill, variation)
     return True
 #======================================================================
 def FFAIDSR(event, hc, AIDCuts, elList, Z0list, D0list, variation):
@@ -59,15 +59,15 @@ def FFAIDSR(event, hc, AIDCuts, elList, Z0list, D0list, variation):
     nlep_fill = 0
     nlepSR_fill = 0
     for CutsDict, el, z0, d0 in zip(AIDCuts, elList, Z0list, D0list):
-        if(CutsDict["HLT_e5"]):
-            hc.fill(event, "HLTe5", el, z0, d0, variation)
-        if(CutsDict["HLT_e10"]):
-            hc.fill(event, "HLTe10", el, z0, d0, variation)
-        if(CutsDict["HLT_e15"]):
-            hc.fill(event, "HLTe15", el, z0, d0, variation)
-        if(CutsDict["HLT_e20"] ):
-            hc.fill(event, "HLTe20", el, z0, d0, variation)
-        if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+        #if(CutsDict["HLT_e5"]):
+        #    hc.fill(event, "HLTe5", el, z0, d0, variation)
+        #if(CutsDict["HLT_e10"]):
+        #    hc.fill(event, "HLTe10", el, z0, d0, variation)
+        #if(CutsDict["HLT_e15"]):
+        #    hc.fill(event, "HLTe15", el, z0, d0, variation)
+        #if(CutsDict["HLT_e20"] ):
+        #    hc.fill(event, "HLTe20", el, z0, d0, variation)
+        if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
             #print "filling Anti ID lep w/ Pt %f" % el.Pt()
             nlep_fill += 1
             hc.fill(event, "FFAID", el, z0, d0, variation)
@@ -83,16 +83,16 @@ def FFAIDSR(event, hc, AIDCuts, elList, Z0list, D0list, variation):
                 if( CutsDict["40mt"] ):
                     nlepSR_fill += 1
                     hc.fill(event, "FFAIDSR", el, z0, d0, variation)
-    if len(elList):
-        hc.fillN(event, "FFAIDN", elList[0], nlep, variation)
-        hc.fillN(event, "FFAIDNfill", elList[0], nlep_fill, variation)
-        hc.fillN(event, "FFAIDSRNfill", elList[0], nlepSR_fill, variation)
+    #if len(elList):
+    #    hc.fillN(event, "FFAIDN", elList[0], nlep, variation)
+    #    hc.fillN(event, "FFAIDNfill", elList[0], nlep_fill, variation)
+    #    hc.fillN(event, "FFAIDSRNfill", elList[0], nlepSR_fill, variation)
     return True
 #======================================================================
 def FFIDSR2D(event, hc, IDCuts, elList, Z0list, D0list, variation):
     for CutsDict, el, z0, d0 in zip(IDCuts, elList, Z0list, D0list):
         if( CutsDict["elEta07"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFIDEta07", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -104,7 +104,7 @@ def FFIDSR2D(event, hc, IDCuts, elList, Z0list, D0list, variation):
                     if( CutsDict["40mt"] ):
                         hc.fill(event, "FFIDSREta07", el, z0, d0, variation)
         elif( CutsDict["elEta137"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFIDEta137", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -116,7 +116,7 @@ def FFIDSR2D(event, hc, IDCuts, elList, Z0list, D0list, variation):
                     if( CutsDict["40mt"] ):
                         hc.fill(event, "FFIDSREta137", el, z0, d0, variation)
         elif( CutsDict["elEta152"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFIDEta152", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -128,7 +128,7 @@ def FFIDSR2D(event, hc, IDCuts, elList, Z0list, D0list, variation):
                     if( CutsDict["40mt"] ):
                         hc.fill(event, "FFIDSREta152", el, z0, d0, variation)
         elif( CutsDict["elEta201"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFIDEta201", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -140,7 +140,7 @@ def FFIDSR2D(event, hc, IDCuts, elList, Z0list, D0list, variation):
                     if( CutsDict["40mt"] ):
                         hc.fill(event, "FFIDSREta201", el, z0, d0, variation)
         elif( CutsDict["elEta247"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFIDEta247", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -156,7 +156,7 @@ def FFIDSR2D(event, hc, IDCuts, elList, Z0list, D0list, variation):
 def FFAIDSR2D(event, hc, AIDCuts, elList, Z0list, D0list, variation):
     for CutsDict, el, z0, d0 in zip(AIDCuts, elList, Z0list, D0list):
         if( CutsDict["elEta07"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFAIDEta07", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -168,7 +168,7 @@ def FFAIDSR2D(event, hc, AIDCuts, elList, Z0list, D0list, variation):
                     if( CutsDict["40mt"] ):
                         hc.fill(event, "FFAIDSREta07", el, z0, d0, variation)
         elif( CutsDict["elEta137"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFAIDEta137", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -180,7 +180,7 @@ def FFAIDSR2D(event, hc, AIDCuts, elList, Z0list, D0list, variation):
                     if( CutsDict["40mt"] ):
                         hc.fill(event, "FFAIDSREta137", el, z0, d0, variation)
         elif( CutsDict["elEta152"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFAIDEta152", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -192,7 +192,7 @@ def FFAIDSR2D(event, hc, AIDCuts, elList, Z0list, D0list, variation):
                     if( CutsDict["40mt"] ):
                         hc.fill(event, "FFAIDSREta152", el, z0, d0, variation)
         elif( CutsDict["elEta201"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFAIDEta201", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
@@ -204,7 +204,7 @@ def FFAIDSR2D(event, hc, AIDCuts, elList, Z0list, D0list, variation):
                     if( CutsDict["40mt"] ):
                         hc.fill(event, "FFAIDSREta201", el, z0, d0, variation)
         elif( CutsDict["elEta247"] ):
-            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) ):
+            if( ((CutsDict["HLT_e5"] and CutsDict["el5"]) or (CutsDict["HLT_e10"] and CutsDict["el10"]) or (CutsDict["HLT_e15"] and CutsDict["el15"]) or (CutsDict["HLT_e20"] and CutsDict["el20"])) and CutsDict["j100"] ):
                 hc.fill(event, "FFAIDEta247", el, z0, d0, variation)
                 if variation == 'mtUP':
                     if( CutsDict["50mt"] ):
