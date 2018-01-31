@@ -9,8 +9,8 @@ import math
 from functions import *
 
 #GLOBAL VARIABLES
-logYAxis = False
-#logYAxis = True
+#logYAxis = False
+logYAxis = True
 
 #ATLAS STYLE
 ROOT.gROOT.LoadMacro("/export/home/sschier/workarea/atlasstyle-00-03-05/AtlasUtils.C")
@@ -666,16 +666,25 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
             bkSubtract = m_data.GetBinContent(x) - m_hsum.GetBinContent(x)
             bkSubtract_error = m_data.GetBinError(x) - m_hsum.GetBinError(x)
             #print ' bin %i = %f' % (x, bkSubtract)
-            if( x > 5 and x <= 10 ):
-                value_list.append(bkSubtract)
-                error_list.append(bkSubtract_error)
-            elif( x > 10 and x <= 15 ):
+           # if( x > 5 and x <= 10 ):
+           #     value_list.append(bkSubtract)
+           #     error_list.append(bkSubtract_error)
+           # elif( x > 10 and x <= 15 ):
+           #     sum1 += bkSubtract
+           #     err1 += bkSubtract_error
+           # elif( x > 15 and x <= 20 ):
+           #     sum2 += bkSubtract
+           #     err2 += bkSubtract_error
+           # elif( x > 20 ):
+           #     sum3 += bkSubtract
+           #     err3 += bkSubtract_error
+            if( x > 5 and x <= 7 ):
                 sum1 += bkSubtract
                 err1 += bkSubtract_error
-            elif( x > 15 and x <= 20 ):
+            elif( x > 7 and x <= 10 ):
                 sum2 += bkSubtract
                 err2 += bkSubtract_error
-            elif( x > 20 ):
+            elif( x > 10 ):
                 sum3 += bkSubtract
                 err3 += bkSubtract_error
         value_list.append(sum1)
@@ -784,8 +793,12 @@ def renorm(lumi, path, region, var, indir, debug):
         #integral_d = m_data.IntegralAndError(13, 20, error_d)
         #integral_m = m_hsum.IntegralAndError(13, 20, error_m)
     elif( var == 'MET' ):
+        #integral_d = m_data.IntegralAndError(12, 15, error_d) #bins for MET >150 GeV
+        #integral_m = m_hsum.IntegralAndError(12, 15, error_m)
         integral_d = m_data.IntegralAndError(13, 15, error_d) #bins for MET >200 GeV
         integral_m = m_hsum.IntegralAndError(13, 15, error_m)
+        #integral_d = m_data.IntegralAndError(14, 15, error_d) #bins for MET >300 GeV
+        #integral_m = m_hsum.IntegralAndError(14, 15, error_m)
 
     renorm, error = divideAndError(integral_d, error_d, integral_m, error_m)
     print "normalization factor for %s = %f +- %f" %(region, renorm, error)

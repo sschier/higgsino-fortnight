@@ -18,6 +18,8 @@ class cuts:
         IDlist = electronList
         #IDlist = obs.getIDelectronList()
         #n_baseel = obs.getNBaseel()
+        n_bjet = obs.n_bjet
+        j1pt = obs.jet_pt[0]/1000.
 
         #Make list of dictionaresy of cuts
         Dics = []
@@ -28,9 +30,26 @@ class cuts:
             #Make dictionary of cuts
             Cuts = {}
             
-            #if( n_baseel >= 1 ):
-            #    Cuts["1el"] = True
-            #else: Cuts["1el"] = False
+            if( j1pt > 75. ):
+                Cuts["j75"] = True
+            else: Cuts["j75"] = False
+            if( j1pt > 100. ):
+                Cuts["j100"] = True
+            else: Cuts["j100"] = False
+
+            if( n_bjet == 0 ):
+                Cuts["bveto"] = True
+            else: Cuts["bveto"] = False
+
+            if( mt < 30. ):
+                Cuts["30mt"] = True
+            else:
+                Cuts["30mt"] = False
+
+            if( mt < 50. ):
+                Cuts["50mt"] = True
+            else:
+                Cuts["50mt"] = False
 
             if( mt < 40. ):
                 Cuts["40mt"] = True

@@ -12,7 +12,7 @@ def divideAndErrors(num_list, num_err_list, denom_list, denom_err_list):
         err = err_high if err_high > err_low else err_low
         divs.append(dividend)
         errs.append(err)
-        print "%f +- %f" % (dividend, err)
+        print "& %.3f $\pm$ %.3f" % (dividend, err)
     return divs, errs
 
 def divideAndError(n, ne, d, de):

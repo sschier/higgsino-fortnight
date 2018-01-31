@@ -1,0 +1,16 @@
+./tree_trimmer.py -t ttbar -o ttbar410000_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/ttbar/mc15_13TeV.410000.ttbar.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t wjets_22 -o wjets361101_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/wjets_22/mc15_13TeV.361101.wjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t wjets_22 -o wjets361100_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/wjets_22/mc15_13TeV.361100.wjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t wjets_22 -o wjets361102_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/wjets_22/mc15_13TeV.361102.wjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t wjets_22 -o wjets361103_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/wjets_22/mc15_13TeV.361103.wjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t wjets_22 -o wjets361104_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/wjets_22/mc15_13TeV.361104.wjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t wjets_22 -o wjets361105_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/wjets_22/mc15_13TeV.361105.wjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t zjets_22 -o zjets361106_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/zjets_22/mc15_13TeV.361106.zjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t zjets_22 -o zjets361107_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/zjets_22/mc15_13TeV.361107.zjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t zjets_22 -o zjets361108_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/zjets_22/mc15_13TeV.361108.zjets_22.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t singletop -o singletop410011_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/singletop/mc15_13TeV.410011.singletop.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t singletop -o singletop410012_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/singletop/mc15_13TeV.410012.singletop.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t singletop -o singletop410013_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/singletop/mc15_13TeV.410013.singletop.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t singletop -o singletop410014_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/singletop/mc15_13TeV.410014.singletop.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t singletop -o singletop410025_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/singletop/mc15_13TeV.410025.singletop.DAOD_SUSY5.root skims/skim-ff-el.py
+./tree_trimmer.py -t singletop -o singletop410026_skim.root -b boff/bon-el.txt -s skim /export/share/data/sschier/FakeLepton/singletop/mc15_13TeV.410026.singletop.DAOD_SUSY5.root skims/skim-ff-el.py

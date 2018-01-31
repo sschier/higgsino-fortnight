@@ -1,0 +1,1 @@
+./tree_trimmer.py -t Zmm_NoSys -o Zmm_skim.root -s skim /export/share/data/sschier/Higgsino/CommonTuples/SusySkimHiggsino_v1.2_SUSY16_Bkgs_tree/Zmm_SusySkimHiggsino_v1.2_SUSY16_tree.root skims/skim-met.py
