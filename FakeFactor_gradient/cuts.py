@@ -8,7 +8,6 @@ class cuts:
     def __init__(self, obs):
 
         self.obs = obs
-        #self.IDlist = obs.getIDelectronList()
 
     def getCuts(self, electronList):
         obs = self.obs
@@ -16,10 +15,9 @@ class cuts:
         HLT_e5, HLT_e10, HLT_e15, HLT_e20 = obs.getTriggers()
         #electron variables
         IDlist = electronList
-        #IDlist = obs.getIDelectronList()
-        #n_baseel = obs.getNBaseel()
         n_bjet = obs.n_bjet
         j1pt = obs.jet_pt[0]/1000.
+        met = obs.met
 
         #Make list of dictionaresy of cuts
         Dics = []
@@ -30,6 +28,14 @@ class cuts:
             #Make dictionary of cuts
             Cuts = {}
             
+            if( met < 80. ):
+                Cuts["80met"] = True
+            else: Cuts["80met"] = False
+
+            if( met > 200. ):
+                Cuts["met200"] = True
+            else: Cuts["met200"] = False
+
             if( j1pt > 75. ):
                 Cuts["j75"] = True
             else: Cuts["j75"] = False

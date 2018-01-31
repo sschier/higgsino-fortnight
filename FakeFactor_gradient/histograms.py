@@ -21,13 +21,11 @@ class antiidhists:
         self.newdir=topdir.mkdir(tag)
         self.newdir.cd()
 
-        #xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 125., 150., 175., 200., 250., 300., 400., 600.]
         xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 150., 200., 300., 400., 600.]
         etabins = [0., 0.7, 1.37, 1.52, 2.01, 2.47]
 
         self.hists['AntiIDelPt']= ROOT.TH1F("h_"+tag+"_AntiIDelPt",tag+"_AntiIDelPt; AntiID electron p_{T} [GeV]; Events",100, 0, 100)
         self.hists["Met"]=        ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)", 15, array('d',xbins))
-        #self.hists["Met"]=       ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
         self.hists['Mt']=         ROOT.TH1F("h_"+tag+"_Mt",tag+"_Mt; m_{T} [GeV]; Events/(10 GeV) ",20, 0, 200)
         self.hists['Z0SinTheta']= ROOT.TH1F("h_"+tag+"_Z0sinT",tag+"_Z0sinT; Z_{0}sin(#theta) [mm]; Events/(0.25mm) ",20, 0, 5)
         self.hists['D0Sig']=      ROOT.TH1F("h_"+tag+"_D0sig",tag+"_D0sig; D_{0}sig; Events/(0.2) ",50, 0, 10)
@@ -40,7 +38,6 @@ class antiidhists:
         self.hists['NPV']=        ROOT.TH1F("h_"+tag+"_Npv", tag+"_Npv; primary vertices; Events",29, 1, 30)
         self.hists['dphiJ1met']=  ROOT.TH1F("h_"+tag+"_dphi_j1met",tag+"_dphi_j1met; #Delta#phi_{jet_{1}-met} [rad];Events/(0.5 rad)",7, 0., 3.5 )
         self.hists['dphiL1met']=  ROOT.TH1F("h_"+tag+"_dphi_l1met",tag+"_dphi_l1met;#Delta#phi_{lep_{1}-met} [rad];Events/(0.5 rad)",7, 0., 3.5)
-
 
         topdir.cd()
         self.collections={}
@@ -93,19 +90,19 @@ class antiidhists:
         npv = obs.num_pv
         mu =  obs.mu
 
-        #Calculate trigger weight
+        #######################################################
+        #Create trigger weights instance
+        #######################################################
         norm = renorm(obs)
-        #ptRegion = norm.getRegion(AntiIDpt, triggers)
 
-        #Calculating weight
+        #######################################################
+        #Calculate weights 
+        #######################################################
         if self.isdata:
-            #print "getting trigger prescales"
             totalWeight = norm.getTriggerWeights(self.isdata, AntiIDpt, triggers)
-            #print 'Anti ID total weight = %f' % totalWeight
         else:
             xs_weight, mc_event_weight, sf_el, sf_jvt, sf_btag, pileup_weight = obs.getWeights()
             if( variation == 'pileup' ):
-                #print "including pileup in weight"
                 totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag*pileup_weight) #for pileup systematic
             else:
                 totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag)
@@ -138,13 +135,11 @@ class idhists:
         self.newdir=topdir.mkdir(tag)
         self.newdir.cd()
 
-        #xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 125., 150., 175., 200., 250., 300., 400., 600.]
         xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 150., 200., 300., 400., 600.]
         etabins = [0., 0.7, 1.37, 1.52, 2.01, 2.47]
 
         self.hists['IDelPt']=     ROOT.TH1F("h_"+tag+"_IDelPt",tag+"_IDelPt; ID electron p_{T} [GeV]; Events",100, 0, 100)
         self.hists["Met"]=        ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)", 15, array('d',xbins))
-        #self.hists["Met"]=       ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
         self.hists['Mt']=         ROOT.TH1F("h_"+tag+"_Mt",tag+"_Mt; m_{T} [GeV]; Events/(10 GeV) ",20, 0, 200)
         self.hists['Z0SinTheta']= ROOT.TH1F("h_"+tag+"_Z0sinT",tag+"_Z0sinT; Z_{0}sin(#theta) [mm]; Events/(0.25mm) ",20, 0, 5)
         self.hists['D0Sig']=      ROOT.TH1F("h_"+tag+"_D0sig",tag+"_D0sig; D_{0}sig; Events/(0.2) ",50, 0, 10)
@@ -180,14 +175,15 @@ class idhists:
         intLumi = 1.0
         met = obs.met
         mt =  obs.getMT(elVec)
-        #mt =  obs.getMT(obs.getIDelectronVec())
-        triggers = {}
+
         #trigger variables
+        triggers = {}
         HLT_e5, HLT_e10, HLT_e15, HLT_e20 = obs.getTriggers()
         triggers['HLT_e5'] = HLT_e5
         triggers['HLT_e10'] = HLT_e10
         triggers['HLT_e15'] = HLT_e15
         triggers['HLT_e20'] = HLT_e20
+
         #electron variables
         IDpt     = elVec.Pt()
         IDeta    = abs(elVec.Eta())
@@ -213,13 +209,10 @@ class idhists:
 
         #Calculating weight
         if self.isdata:
-            #print "getting trigger prescales"
             totalWeight = norm.getTriggerWeights(self.isdata, IDpt, triggers)
-            #print 'ID total weight = %f' % totalWeight
         else:
             xs_weight, mc_event_weight, sf_el, sf_jvt, sf_btag, pileup_weight = obs.getWeights()
             if( variation == 'pileup' ):
-                #print "including pileup in weight"
                 totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag*pileup_weight) #for pileup systematic
             else:
                 totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag)
@@ -238,75 +231,6 @@ class idhists:
         self.hists["JetHt"].Fill(float(ht), totalWeight)
         self.hists["AvMu"].Fill(float(mu), totalWeight)
         self.hists["NPV"].Fill(float(npv), totalWeight)
-
-
-#------------------------------------------------------------------
-class fakehists:
-    def __init__(self, tag, topdir, isdata, treetype, detaillevel=99):
-        self.tag=tag
-        self.topdir=topdir
-        self.isdata = isdata
-        self.tree = treetype
-        self.hists={}
-        self.detaillevel=detaillevel
-        self.newdir=topdir.mkdir(tag)
-        self.newdir.cd()
-
-
-        self.hists['n_el']=ROOT.TH1F("h_"+tag+"_n_el",tag+"_n_el; n el; Events ", 4, 0, 4)
-        xbins = [0., 10., 20., 30., 40., 50., 60., 70., 80., 90., 100., 125., 150., 175., 200., 250., 300., 400., 600.]
-        self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)", 18, array('d',xbins))
-        #self.hists["Met"]=ROOT.TH1F("h_"+tag+"_MET",tag+"_MET; MET [GeV]; Events/(10 GeV)",60,0,600)
-
-        topdir.cd()
-        self.collections={}
-
-    def write(self):
-        self.newdir.cd()
-        for i,k in self.hists.iteritems():
-            k.SetOption("HIST")
-            k.Write()
-        for i,k in self.collections.iteritems():
-            k.write()
-        self.topdir.cd()
-
-    def add(self, coll):
-        for i,k in self.hists.iteritems():
-            if i in coll.hists: k.Add(coll.hists[i])
-        for i,k in self.collections.iteritems():
-            if i in coll.collections: k.add(coll.collections[i])
-
-    def fill(self, obs, elVec, nLep, variation):
-        intLumi = 1.0
-        met = obs.met
-        triggers = {}
-        #trigger variables
-        HLT_e5, HLT_e10, HLT_e15, HLT_e20 = obs.getTriggers()
-        triggers['HLT_e5'] = HLT_e5
-        triggers['HLT_e10'] = HLT_e10
-        triggers['HLT_e15'] = HLT_e15
-        triggers['HLT_e20'] = HLT_e20
-        #electron variables
-        IDpt     = elVec.Pt()
-        n_IDel = nLep
-
-        #Calculate trigger weight
-        norm = renorm(obs)
-
-        #Calculating weight
-        if self.isdata:
-            #print "getting trigger prescales"
-            totalWeight = norm.getTriggerWeights(self.isdata, IDpt, triggers)
-        else:
-            xs_weight, mc_event_weight, sf_el, sf_jvt, sf_btag, pileup_weight = obs.getWeights()
-            if( variation == 'pileup' ):
-                #print "including pileup in weight"
-                totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag*pileup_weight) #for pileup systematic
-            else:
-                totalWeight = float(xs_weight*mc_event_weight*sf_el*sf_jvt*sf_btag)
-
-        self.hists["n_el"].Fill(float(n_IDel), totalWeight)
-        self.hists["Met"].Fill(float(met), totalWeight)
 
 
 

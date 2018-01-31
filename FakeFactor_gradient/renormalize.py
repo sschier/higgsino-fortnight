@@ -10,6 +10,9 @@ class renorm:
         self.weights = {}
         self.obs = obs
 
+    #data samples renormalized to a total of 10 pb^-1
+    #data15 and data16 reweighted according to their fractional contribution to the total
+    #Weights commented out are for each data set being normalized to 10 pb-1 separately
     def fillWeights(self, data):
         if data == 'data15':
             #self.weights['HLT_e5'] = 3067.5
@@ -31,26 +34,19 @@ class renorm:
             self.weights['HLT_e15'] = 1.0155
             self.weights['HLT_e20'] = 0.5345
 
+    #############################################################################
+    #Picks the lowest pre-sclaed trigger
+    #Originally much more complicated by making sure the 
+    #lepton pt matched the desired trigger but that is done FF_Maker.py
+    #############################################################################
     def getRegion(self, lepPt, triggers):
         region = ''
-        #if( triggers['HLT_e5'] and lepPt < 10. ):
-        #    region = 'HLT_e5'
-        #elif( triggers['HLT_e10'] and lepPt >= 10. and lepPt < 15. ):
-        #    region = 'HLT_e10'
-        #elif( triggers['HLT_e15'] and lepPt >= 15. and lepPt < 20. ):
-        #    region = 'HLT_e15'
-        #elif( triggers['HLT_e20'] and lepPt >= 20. ):
-        #    region = 'HLT_e20'
-        #else: print 'NO REGION'
         if( triggers['HLT_e20'] ):
             region = 'HLT_e20'
-            #if lepPt < 20: print '***** trigger = 20 and pt = %f' %lepPt
         elif( triggers['HLT_e15'] ):
             region = 'HLT_e15'
-            #if lepPt < 15: print '***** trigger = 15 and pt = %f' %lepPt
         elif( triggers['HLT_e10'] ):
             region = 'HLT_e10'
-            #if lepPt < 10: print '***** trigger = 10 and pt = %f' %lepPt
         elif( triggers['HLT_e5'] ): 
             region = 'HLT_e5'
         else: print 'NO REGION'

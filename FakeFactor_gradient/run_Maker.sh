@@ -1,5 +1,13 @@
-#python FFMaker.py --test --input "/export/share/data/sschier/FakeLepton/el_trigger_skims/data16_skim/data310691_skim.root" --isData "data16" --tree "CollectionTree" --outfile "outputHist_310691.root"
-#python FFMaker.py --test --input "/export/share/data/sschier/FakeLepton/el_trigger_skims/data15_skim/data280319_skim.root" --isData "data15" --tree "CollectionTree" --outfile "outputHist_280319.root"
-#python FFMaker.py --test --input "/export/share/data/sschier/FakeLepton/el_trigger_skims/wjets_skim/wjets361101_skim.root" --tree "wjets_22" --outfile "outputHist_361101.root"
-#python FFMaker.py --test --input "/export/share/data/sschier/FakeLepton/el_trigger_skims/wjets_skim/wjets361101_skim.root" --tree "wjets_22" --outfile "outputHist_361101.root" -variation "pileup"
-python FFMaker.py --test --input "/export/share/data/sschier/FakeLepton/June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data//data16_13TeV/June16_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_data16_13TeV.00310691.physics_Main.merge.DAOD_SUSY5.f756_m1704_p2950.root" --isData "data16" --tree "CollectionTree" --outfile "outputHist_310691.root"
+
+python FFMaker_j100.py  -input "/export/share/data/sschier/FakeLepton/July4_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_AddAuthor/data16_el_skims/job_000/skim.root" -isData "data16" -tree "data" -outfile "outputHist_310691_j100.root" -AIDvariation "blayer" 
+
+
+#Examples of running systematics on FF measurement region
+#python FFMaker_j100.py  -input "/export/share/data/sschier/FakeLepton/July4_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_AddAuthor/data16_el_skims/job_000/skim.root" -isData "data16" -tree "data" -outfile "outputHist_310691_mtUP.root" -AIDvariation "blayer" -variation "mtUP"
+#python FFMaker_j100.py  -input "/export/share/data/sschier/FakeLepton/July4_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_AddAuthor/data16_el_skims/job_000/skim.root" -isData "data16" -tree "data" -outfile "outputHist_310691_mtDOWN.root" -AIDvariation "blayer" -variation "mtDOWN"
+
+#Examples of running with alternate anti-ID variations
+#python FFMaker_j100.py  -input "/export/share/data/sschier/FakeLepton/July4_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_AddAuthor/data16_el_skims/job_000/skim.root" -isData "data16" -tree "data" -outfile "outputHist_310691.root" -AIDvariation "medium"
+#python FFMaker_j100.py  -input "/export/share/data/sschier/FakeLepton/July4_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_AddAuthor/data16_el_skims/job_000/skim.root" -isData "data16" -tree "data" -outfile "outputHist_310691.root" -AIDvariation "blayer"
+#python FFMaker_j100.py --test -input "/export/share/data/sschier/FakeLepton/July4_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_AddAuthor/data16_el_skims/job_000/skim.root" -isData "data16" -tree "data" -outfile "outputHist_310691.root" -AIDvariation "mediumD0sig"
+#python FFMaker_j100.py  -input "/export/home/sschier/workarea/tree_trimmer/condor/data16_el_skims/job_000/skim.root" -isData "data16" -tree "data" -outfile "outputHist_310691.root" -AIDvariation "blayer"
