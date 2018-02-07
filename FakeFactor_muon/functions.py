@@ -17,7 +17,7 @@ def divideAndErrors(num_list, num_err_list, denom_list, denom_err_list):
 
 def divideAndError(n, ne, d, de):
 
-    print n, ne, d, de
+    #print n, ne, d, de
     dividend = float(n/d)
     dev_large = float(n+ne)/(d-de)
     dev_small = float(n-ne)/(d+de)

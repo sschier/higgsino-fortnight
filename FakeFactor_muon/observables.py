@@ -183,7 +183,7 @@ class observable:
     #    return AIDmuonVectors, AIDmuonZ0sinT, AIDmuonD0sig
 
 
-    def getAntiIDmuons(self, variation, debug):
+    def getAntiIDmuons(self, debug):
         AIDmuonVectors = []
         AIDmuonZ0sinT = []
         AIDmuonD0sig = []
@@ -201,7 +201,7 @@ class observable:
 
 
         #fail isolation only
-    def getAntiIDMuons1(self, variation, debug):
+    def getAntiIDMuons1(self, debug):
         AIDmuonVectors = []
         AIDmuonZ0sinT = []
         AIDmuonD0sig = []
@@ -226,7 +226,7 @@ class observable:
         return AIDmuonVectors, AIDmuonZ0sinT, AIDmuonD0sig
 
         #fail d0 only
-    def getAntiIDMuons2(self, variation, debug):
+    def getAntiIDMuons2(self, debug):
         AIDmuonVectors = []
         AIDmuonZ0sinT = []
         AIDmuonD0sig = []
@@ -252,7 +252,7 @@ class observable:
 
 
         #fail all
-    def getAntiIDMuons12(self, variation, debug):
+    def getAntiIDMuons12(self, debug):
         AIDmuonVectors = []
         AIDmuonZ0sinT = []
         AIDmuonD0sig = []

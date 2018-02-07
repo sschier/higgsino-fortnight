@@ -151,7 +151,7 @@ def GetBGHists(file_list, hist_path, debug):
             print hists[k]
     return hists
 #======================================================================
-def SumMCHists(hist_list, lumi, debug):
+def SumHists(hist_list, lumi, debug):
     if debug:
         print 'in SumMC'
         print hist_list
@@ -169,7 +169,7 @@ def SumMCHists(hist_list, lumi, debug):
 #======================================================================
 def MakeDataStack(hist_list, lumi, debug):
     hs = ROOT.THStack("hist stack", "hist stack")
-    hsum = SumMCHists(hist_list, lumi, debug)
+    hsum = SumHists(hist_list, lumi, debug)
     #make list of hsum bin content to normalize stack hists
     sum_bin_list = []
     norm_hist_dict = {}
@@ -208,8 +208,7 @@ def MakeDataStack(hist_list, lumi, debug):
         print sortedHistTuple
     #sortedKeyList = sorted(hist_list.keys())
     sortedKeyList = sorted(norm_hist_dict.keys())
-    #colors = [40, 41, 42, 46, 49, 31, 38, 15]
-    colors = [5, 3, 8, 2, 4, 7, 9, 51, 6]  #[yellow, Lgreen, Dgreen, red, blue, cyan, indigo, purple, magenta]
+    colors = [3, 7, 9, 4, 8]  #[Lgreen, cyan, indigo, blue, Dgreen]
     markers = [33, 34, 20, 21, 29, 31, 23, 26, 25]     #[diamond, cross, circle, square, star, cross-hair, triangleup, opentriangledown, open-square
     colormap = {}
     markermap = {}
@@ -239,7 +238,7 @@ def MakeDataStack(hist_list, lumi, debug):
 ##======================================================================
 #def MakeDataStack(hist_list, lumi, debug):
 #    hs = ROOT.THStack("hist stack", "hist stack")
-#    hsum = SumMCHists(hist_list, lumi, debug)
+#    hsum = SumHists(hist_list, lumi, debug)
 #    #make list of hsum bin content to normalize stack hists
 #    sum_bin_list = []
 #    norm_hist_dict = {}
@@ -296,7 +295,7 @@ def MakeDataStack(hist_list, lumi, debug):
 #======================================================================
 def MakeHistStack(hist_list, lumi, debug):
     hs = ROOT.THStack("hist stack", "hist stack")
-    hsum = SumMCHists(hist_list, lumi, debug)
+    hsum = SumHists(hist_list, lumi, debug)
     maxVal = hsum.GetBinContent(hsum.GetMaximumBin())*10000*lumi
     minVal = 1.
     sortedHistTuple = sorted(hist_list.items(), key=lambda x: x[1].GetBinContent(x[1].GetMaximumBin()))
@@ -466,22 +465,24 @@ def MakeRatio(bkgndHist, dataHist):
 
     return rh
 #======================================================================
-def plotDeco(lumi, region, var, indir, debug):
+def plotDeco(lumi, region, var, nbjet, indir, debug):
     if debug: print "opening output file"
     o=ROOT.TFile("test.root", "RECREATE")
     if debug: print "Getting MC list"
-    if( var == 'Mt' or var == 'MET'):
-        data_path = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_%s' % var
+
+    #if( var == 'Mt' or var == 'MET'):
+    if( var == 'Mt'):
+        data_path = 'FFAIDSR/FFAIDSR_FFAID%s/h_FFAIDSR_FFAID%s_%s' % (nbjet, nbjet, var)
         deco_path_list = []
-        deco_path_list.append('AID1/AID1_FFAID/h_AID1_FFAID_%s' % var)
-        deco_path_list.append('AID2/AID2_FFAID/h_AID2_FFAID_%s' % var)
-        deco_path_list.append('AID12/AID12_FFAID/h_AID12_FFAID_%s' % var)
+        deco_path_list.append('AID1/AID1_FFAID%s/h_AID1_FFAID%s_%s' % (nbjet, nbjet, var))
+        deco_path_list.append('AID2/AID2_FFAID%s/h_AID2_FFAID%s_%s' % (nbjet, nbjet, var))
+        deco_path_list.append('AID12/AID12_FFAID%s/h_AID12_FFAID%s_%s' % (nbjet, nbjet, var))
     else:
-        data_path = 'FFAIDSR/FFAIDSR_FFAIDSR/h_FFAIDSR_FFAIDSR_%s' % var
+        data_path = 'FFAIDSR/FFAIDSR_FFAIDSR%s/h_FFAIDSR_FFAIDSR%s_%s' % (nbjet, nbjet, var)
         deco_path_list = []
-        deco_path_list.append('AID1/AID1_FFAIDSR/h_AID1_FFAIDSR_%s' % var)
-        deco_path_list.append('AID2/AID2_FFAIDSR/h_AID2_FFAIDSR_%s' % var)
-        deco_path_list.append('AID12/AID12_FFAIDSR/h_AID12_FFAIDSR_%s' % var)
+        deco_path_list.append('AID1/AID1_FFAIDSR%s/h_AID1_FFAIDSR%s_%s' % (nbjet, nbjet, var))
+        deco_path_list.append('AID2/AID2_FFAIDSR%s/h_AID2_FFAIDSR%s_%s' % (nbjet, nbjet, var))
+        deco_path_list.append('AID12/AID12_FFAIDSR%s/h_AID12_FFAIDSR%s_%s' % (nbjet, nbjet, var))
 
     deco_name_list = []
     deco_name_list.append('fail_ISO')
@@ -495,7 +496,7 @@ def plotDeco(lumi, region, var, indir, debug):
     m_data.SetMarkerSize(0.5)
     if debug: print "Making deco hist stack"
     m_dstack = MakeDataStack(deco_hist_list, lumi,  debug)
-    m_dsum = SumMCHists(deco_hist_list, lumi, debug)
+    m_dsum = SumHists(deco_hist_list, lumi, debug)
     m_ratio = MakeDecoRatio(m_data, m_dsum, debug)
     m_legend = MakeLegend(deco_hist_list, m_data, region)
     sum_bin_list = []
@@ -531,7 +532,7 @@ def plotDeco(lumi, region, var, indir, debug):
     #ROOT.myText(       0.41,  0.85, 1, "%s" % region)
     ROOT.ATLASLabel(0.21,0.90,"Internal")
     #raw_input("-->")
-    canvas.Print('%s_%s.pdf' % (region, var))
+    canvas.Print('%s_%s_%s.pdf' % (region, var, nbjet))
     canvas.Close()
     return True
 #======================================================================
@@ -541,20 +542,16 @@ def plotCR(lumi, sample_path, region, variable, indir, debug):
     if debug: print "Setting variable to plot"
     var = variable
     path = sample_path
-    #To renormalize data to 10fb, multiply by 0.2777
     if debug: print "Getting MC list"
-    #MChist_list = GetMCHists(GetRootFiles(indir, 0), sample_path, debug)
     BGhist_list = GetBGHists(GetRootFiles(indir, debug), path, debug)
     if debug: print "Getting data hist"
     m_data = GetDataHists(GetRootFiles(indir, debug), path, debug)
     myRange = m_data.GetNbinsX()
-    #m_data.Scale(0.00028)
     if debug: print "Making MC hist stack"
     m_hstack = MakeHistStack(BGhist_list, lumi,  debug)
-    m_hsum = SumMCHists(BGhist_list, lumi, debug)
+    m_hsum = SumHists(BGhist_list, lumi, debug)
     m_ratio = MakeNewRatio(m_data, m_hsum, debug)
     m_legend = MakeLegend(BGhist_list, m_data, region)
-    #canvas, p1, p2 = SetCanvas('%s' % var, region)
     canvas, p1, p2 = SetRatioCanvas('canvas', region, var)
     p2.cd()
     m_ratio.Draw("P")
@@ -593,7 +590,7 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
     myRange = m_data.GetNbinsX()
     if debug: print "Making MC hist stack"
     m_hstack = MakeHistStack(BGhist_list, lumi,  debug)
-    m_hsum = SumMCHists(BGhist_list, lumi, debug)
+    m_hsum = SumHists(BGhist_list, lumi, debug)
     print '*********** %s Fakes Factors in %s ***********' % (region, var)
     if (var == 'Njet' ):
         sum1 = 0.0
@@ -819,24 +816,52 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
     canvas.Close()
     return value_list, error_list
 #======================================================================
-def renorm(lumi, path, region, var, indir, debug):
+def renorm(lumi, path, region, var, lowerLimit, upperLimit, indir, syst, debug):
     if debug: print "opening output file"
-    BGhist_list = GetBGHists(GetRootFiles(indir, debug), path, debug)
+    lowBin = 0
+    highBin = 0
+
+    #get data histogram(assumed to be just one merged histogram
     m_data = GetDataHists(GetRootFiles(indir, debug), path, debug)
+
+    #Get list of MC histograms
+    BGhist_list = GetBGHists(GetRootFiles(indir, debug), path, debug)
+
+    #Make stack of MC histograms
     m_hstack = MakeHistStack(BGhist_list, lumi,  debug)
-    m_hsum = SumMCHists(BGhist_list, lumi, debug)
+    m_hsum = SumHists(BGhist_list, lumi, debug)
     error_d = ROOT.Double()
     error_m = ROOT.Double()
-    #integral_d = m_data.IntegralAndError(11, 20, error_d) #Mt 100-200
-    #integral_m = m_hsum.IntegralAndError(11, 20, error_m)
-    integral_d = m_data.IntegralAndError(13, 20, error_d) #Mt 120-200 GeV
-    integral_m = m_hsum.IntegralAndError(13, 20, error_m)
-    #integral_d = m_data.IntegralAndError(9, 18, error_d) #Mt 80-140 GeV
-    #integral_m = m_hsum.IntegralAndError(9, 18, error_m)
+    for x in xrange(1, m_data.GetNbinsX()+1):
+        if( m_data.GetBinLowEdge(x) ==lowerLimit ):
+            lowBin = x
+        if( upperLimit ):
+            if( m_data.GetBinLowEdge(x)+m_data.GetBinWidth(x) == upperLimit ):
+                highBin = x
+        else: highBin = m_data.GetNbinsX()
+    if( lowBin == 0 or highBin == 0):
+        print "%s Renormalization limits do not match bin edges. Please fix. Exiting!" % var
+        sys.exit()
+    integral_d = m_data.IntegralAndError(lowBin, highBin, error_d)
+    integral_m = m_hsum.IntegralAndError(lowBin, highBin, error_m)
+    #if( var == 'Mt' ):
+    #    integral_d = m_data.IntegralAndError(11, 20, error_d) #Mt 100-200
+    #    integral_m = m_hsum.IntegralAndError(11, 20, error_m)
+    #    #integral_d = m_data.IntegralAndError(13, 20, error_d) #Mt 120-200 GeV
+    #    #integral_m = m_hsum.IntegralAndError(13, 20, error_m)
+    #    #integral_d = m_data.IntegralAndError(9, 18, error_d) #Mt 80-140 GeV
+    #    #integral_m = m_hsum.IntegralAndError(9, 18, error_m)
+    #elif( var == 'MET' ):
+    #    integral_d = m_data.IntegralAndError(15, 18, error_d) #bins for MET >200 GeV
+    #    integral_m = m_hsum.IntegralAndError(15, 18, error_m)
 
     renorm, error = divideAndError(integral_d, error_d, integral_m, error_m)
     print "normalization factor for %s = %f +- %f" %(region, renorm, error)
-    return renorm*1.2
+    if( syst == 'up' ):
+        return renorm*1.2
+    elif( syst == 'down' ):
+        return renorm*0.8
+    else: return renorm
 #======================================================================
 def main(argv):
 
@@ -844,12 +869,16 @@ def main(argv):
     parser.add_argument("-FFvar"        , action='store', default='')
     parser.add_argument("-indir"        , action='store', default='')
     parser.add_argument("-outfile"      , action='store', default='')
+    parser.add_argument("-renormSyst"   , action='store', default='')
+    parser.add_argument("-normvar"      , action='store', default='')
     parser.add_argument("--test"        , action='store_true')
     parser.add_argument("--doDeco"      , action='store_true')
     parser.add_argument("--doFF"      , action='store_true')
     parser.add_argument("--doFF2D"      , action='store_true')
     parser.add_argument("--doFFDeco"    , action='store_true')
     parser.add_argument("--doCR"        , action='store_true')
+    parser.add_argument("--doCRmet"        , action='store_true')
+    parser.add_argument("--doCRmt"        , action='store_true')
     parser.add_argument("--doCR2D"      , action='store_true')
     parser.add_argument("-region"       , action='store', default="SR")
     args=parser.parse_args()
@@ -859,28 +888,44 @@ def main(argv):
     variables_AID = ['Mt', 'MET',  'AntiIDmuPt', 'AntiIDmuEta', 'dphi_j1met', 'dphi_l1met', 'Njet', 'Nbjet', 'J1pt', 'HT', 'Mu', 'Npv']
     variables_ID = ['Mt', 'MET', 'IDmuPt', 'IDmuEta', 'dphi_j1met', 'dphi_l1met', 'Njet', 'Nbjet', 'J1pt', 'HT', 'Mu', 'Npv' ]
 
-###################################################################################
-    if args.doDeco:
-        plotDeco(1.0, 'AID_deco', 'AntiIDmuPt', args.indir, args.test)
-        plotDeco(1.0, 'AID_deco', 'AntiIDmuEta', args.indir, args.test)
-        plotDeco(1.0, 'AID_deco', 'Mt', args.indir, args.test)
-        plotDeco(1.0, 'AID_deco', 'MET', args.indir, args.test)
-        plotDeco(1.0, 'AID_deco', 'Njet', args.indir, args.test)
-        plotDeco(1.0, 'AID_deco', 'Nbjet', args.indir, args.test)
-        plotDeco(1.0, 'AID_deco', 'dphi_j1met', args.indir, args.test)
-        plotDeco(1.0, 'AID_deco', 'dphi_l1met', args.indir, args.test)
-###################################################################################
-    #norm_var = 'MET'
-    norm_var = 'Mt'
-    eta_list = ['07', '137', '152', '201', '247']
+    #This is used for prompt subtraction systematics
+    if( args.renormSyst ): print "RENORM SYST %s" % args.renormSyst
+
+    #The variable used to rescale the MC (prompt subtraction); currently MET and Mt are the only options.
+    if( args.normvar ):
+        norm_var = args.normvar
+    else: norm_var = 'MET'
+
+    #Set the upper and lower limit of your norm_var for rescaling, these valuse must match exact bin edges
+    if( args.renormSyst == 'MET175' ):
+        METlow = 175.
+    else: METlow = 200.
+    MTlow = 100.
+    if( norm_var == 'MET' ): 
+        renormLow = METlow
+        renormHigh = False #If you want an upper limit, then change this to upper limit value
+    if( norm_var == 'Mt' ):
+        renormLow = MTlow
+        renormHigh = False #If you want an upper limit, then change this to upper limit value
+
+    #These names match the denotaion used in FFMaker for path the bjet = 0 and bjet > 0 selections
     b_bins = ['b0', 'b1']
 
     for b in b_bins:
         print 'For %s BJETS!' % b
+        if args.doDeco:
+            plotDeco(1.0, 'AID_deco', 'AntiIDmuPt', b, args.indir, args.test)
+            plotDeco(1.0, 'AID_deco', 'AntiIDmuEta', b, args.indir, args.test)
+            plotDeco(1.0, 'AID_deco', 'Mt', b, args.indir, args.test)
+            plotDeco(1.0, 'AID_deco', 'MET', b, args.indir, args.test)
+            plotDeco(1.0, 'AID_deco', 'Njet', b, args.indir, args.test)
+            plotDeco(1.0, 'AID_deco', 'Nbjet', b, args.indir, args.test)
+            plotDeco(1.0, 'AID_deco', 'dphi_j1met', b, args.indir, args.test)
+            plotDeco(1.0, 'AID_deco', 'dphi_l1met', b, args.indir, args.test)
         AID_norm_path = 'FFAIDSR/FFAIDSR_FFAID%s/h_FFAIDSR_FFAID%s_%s' % (b,b,norm_var)
         ID_norm_path  = 'FFIDSR/FFIDSR_FFID%s/h_FFIDSR_FFID%s_%s' % (b,b,norm_var)
-        AID_lumi  = renorm(10.0, AID_norm_path, 'AID_norm', 'Mt', args.indir, args.test)*10
-        ID_lumi   = renorm(10.0, ID_norm_path,  'ID_norm',  'Mt', args.indir, args.test)*10
+        AID_lumi  = renorm(10.0, AID_norm_path, 'AID_norm', norm_var, renormLow, renormHigh, args.indir, args.renormSyst, args.test)*10
+        ID_lumi   = renorm(10.0, ID_norm_path,  'ID_norm',  norm_var, renormLow, renormHigh, args.indir, args.renormSyst, args.test)*10
         print "AID lumi %f" % AID_lumi
         print "ID lumi %f" % ID_lumi
 
@@ -940,108 +985,24 @@ def main(argv):
                 for v in variables_AID:
                     AID_CR_path  = 'FFAIDSR/FFAIDSR_FFAID%s/h_FFAIDSR_FFAID%s_%s' % (b,b,v)
                     plotCR(AID_lumi, AID_CR_path, 'AID'+b, v,  args.indir, args.test)
-            print '1D DONE %s' % args.FFvar 
-
-        if args.doFF2D:
-            print 'Making 2D FFs and SR plots'
-            #Eta 0.0 - 0.7
-            print 'Eta region 0.0 - 0.7'
-            ID_SR_path = 'FFIDSR2D/FFIDSR2D_FFIDSREta07%s/h_FFIDSR2D_FFIDSREta07%s_%s' % (b,b,IDFF_var)
-            num_list, num_error = plotSR(ID_lumi, ID_SR_path, 'ID_eta07'+b, IDFF_var,  args.indir, args.test)
-
-            AID_SR_path = 'FFAIDSR2D/FFAIDSR2D_FFAIDSREta07+b/h_FFAIDSR2D_FFAIDSREta07+b_%s' % (b,b,AIDFF_var)
-            denom_list, denom_error = plotSR(AID_lumi, AID_SR_path, 'AID_eta07'+b, AIDFF_var,  args.indir, args.test)
-            print 'Writing FFs'
-            FFs, FF_err = divideAndErrors(num_list, num_error, denom_list, denom_error)
-
-
-            #Eta 0.7 - 1.37
-            print 'Eta region 0.7 - 1.37'
-            ID_SR_path = 'FFIDSR2D/FFIDSR2D_FFIDSREta137%s/h_FFIDSR2D_FFIDSREta137%s_%s' % (b,b,IDFF_var)
-            num_list, num_error = plotSR(ID_lumi, ID_SR_path, 'ID_eta137'+b, IDFF_var,  args.indir, args.test)
-
-            AID_SR_path = 'FFAIDSR2D/FFAIDSR2D_FFAIDSREta137%s/h_FFAIDSR2D_FFAIDSREta137%s_%s' % (b,b,AIDFF_var)
-            denom_list, denom_error = plotSR(AID_lumi, AID_SR_path, 'AID_eta137'+b, AIDFF_var,  args.indir, args.test)
-            print 'Writing FFs'
-            FFs, FF_err = divideAndErrors(num_list, num_error, denom_list, denom_error)
-
-
-            #Eta 1.37 - 1.52
-            print 'Eta region 1.37 - 1.52'
-            ID_SR_path = 'FFIDSR2D/FFIDSR2D_FFIDSREta152/h_FFIDSR2D_FFIDSREta152_%s' % IDFF_var
-            num_list, num_error = plotSR(ID_lumi, ID_SR_path, 'ID_eta152', IDFF_var,  args.indir, args.test)
-
-            AID_SR_path = 'FFAIDSR2D/FFAIDSR2D_FFAIDSREta152/h_FFAIDSR2D_FFAIDSREta152_%s' % AIDFF_var
-            denom_list, denom_error = plotSR(AID_lumi, AID_SR_path, 'AID_eta152', AIDFF_var,  args.indir, args.test)
-            print 'Writing FFs'
-            FFs, FF_err = divideAndErrors(num_list, num_error, denom_list, denom_error)
-
-
-            #Eta 1.52 - 2.01
-            print 'Eta region 1.52 - 2.01'
-            ID_SR_path = 'FFIDSR2D/FFIDSR2D_FFIDSREta201/h_FFIDSR2D_FFIDSREta201_%s' % IDFF_var
-            num_list, num_error = plotSR(ID_lumi, ID_SR_path, 'ID_eta201', IDFF_var,  args.indir, args.test)
-
-            AID_SR_path = 'FFAIDSR2D/FFAIDSR2D_FFAIDSREta201/h_FFAIDSR2D_FFAIDSREta201_%s' % AIDFF_var
-            denom_list, denom_error = plotSR(AID_lumi, AID_SR_path, 'AID_eta201', AIDFF_var,  args.indir, args.test)
-            print 'Writing FFs'
-            FFs, FF_err = divideAndErrors(num_list, num_error, denom_list, denom_error)
-
-
-            #Eta 2.01 - 2.47
-            print 'Eta region 2.01 - 2.47'
-            ID_SR_path = 'FFIDSR2D/FFIDSR2D_FFIDSREta247/h_FFIDSR2D_FFIDSREta247_%s' % IDFF_var
-            num_list, num_error = plotSR(ID_lumi, ID_SR_path, 'ID_eta247', IDFF_var,  args.indir, args.test)
-
-            AID_SR_path = 'FFAIDSR2D/FFAIDSR2D_FFAIDSREta247/h_FFAIDSR2D_FFAIDSREta247_%s' % AIDFF_var
-            denom_list, denom_error = plotSR(AID_lumi, AID_SR_path, 'AID_eta247', AIDFF_var,  args.indir, args.test)
-            print 'Writing FFs'
-            FFs, FF_err = divideAndErrors(num_list, num_error, denom_list, denom_error)
-
-        if args.doCR2D:
-            print 'Making 2D CR plots'
-            IDCR_path_list = []
-            IDCR_path_list.append('FFIDSR2D/FFIDSR2D_FFIDEta07/h_FFIDSR2D_FFIDEta07_')
-            IDCR_path_list.append('FFIDSR2D/FFIDSR2D_FFIDEta137/h_FFIDSR2D_FFIDEta137_')
-            IDCR_path_list.append('FFIDSR2D/FFIDSR2D_FFIDEta152/h_FFIDSR2D_FFIDEta152_')
-            IDCR_path_list.append('FFIDSR2D/FFIDSR2D_FFIDEta201/h_FFIDSR2D_FFIDEta201_')
-            IDCR_path_list.append('FFIDSR2D/FFIDSR2D_FFIDEta247/h_FFIDSR2D_FFIDEta247_')
-
-            AIDCR_path_list = []
-            AIDCR_path_list.append('FFAIDSR2D/FFAIDSR2D_FFAIDEta07/h_FFAIDSR2D_FFAIDEta07_')
-            AIDCR_path_list.append('FFAIDSR2D/FFAIDSR2D_FFAIDEta137/h_FFAIDSR2D_FFAIDEta137_')
-            AIDCR_path_list.append('FFAIDSR2D/FFAIDSR2D_FFAIDEta152/h_FFAIDSR2D_FFAIDEta152_')
-            AIDCR_path_list.append('FFAIDSR2D/FFAIDSR2D_FFAIDEta201/h_FFAIDSR2D_FFAIDEta201_')
-            AIDCR_path_list.append('FFAIDSR2D/FFAIDSR2D_FFAIDEta247/h_FFAIDSR2D_FFAIDEta247_')
-
-            for AIDCR, eta in zip(AIDCR_path_list, eta_list):
-                for v in variables_AID:
-                    path = AIDCR+v
-                    plotCR(AID_lumi, path, 'AID_eta'+eta, v,  args.indir, args.test)
-            for IDCR, eta in zip(IDCR_path_list, eta_list):
+            if args.doCRmet:
+                print 'Making 1D CRmet plots'
                 for v in variables_ID:
-                    path = IDCR+v
-                    plotCR(ID_lumi, path, 'ID_eta'+eta, v, args.indir, args.test)
+                    ID_CRmet_path = 'FFIDSR/FFIDSR_FFIDCRmet%s/h_FFIDSR_FFIDCRmet%s_%s' % (b,b,v)
+                    plotCR(ID_lumi, ID_CRmet_path, 'ID_met'+b, v,  args.indir, args.test)
+                for v in variables_AID:
+                    AID_CRmet_path  = 'FFAIDSR/FFAIDSR_FFAIDCRmet%s/h_FFAIDSR_FFAIDCRmet%s_%s' % (b,b,v)
+                    plotCR(AID_lumi, AID_CRmet_path, 'AID_met'+b, v,  args.indir, args.test)
+            if args.doCRmt:
+                print 'Making 1D CRmt plots'
+                for v in variables_ID:
+                    ID_CRmt_path = 'FFIDSR/FFIDSR_FFIDCRmt%s/h_FFIDSR_FFIDCRmt%s_%s' % (b,b,v)
+                    plotCR(ID_lumi, ID_CRmt_path, 'ID_mt'+b, v,  args.indir, args.test)
+                for v in variables_AID:
+                    AID_CRmt_path  = 'FFAIDSR/FFAIDSR_FFAIDCRmt%s/h_FFAIDSR_FFAIDCRmt%s_%s' % (b,b,v)
+                    plotCR(AID_lumi, AID_CRmt_path, 'AID_mt'+b, v,  args.indir, args.test)
+            print 'FFs DONE %s' % args.FFvar 
 
-            
-            #var_list = variables
-            #for v in var_list:
-            #    AIDSR_skim_path = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_%s' % v
-            #    if args.test: print "running plot()"
-            #    plotCR(AID_lumi, AIDSR_skim_path, 'FFAID_skim', v,  args.indir, args.test)
-            #var_list = variables1
-            #for v in var_list:
-            #    IDSR_skim_path = 'FFIDSR/FFIDSR_FFID/h_FFIDSR_FFID_%s' % v
-            #    if args.test: print "running plot()"
-            #    plotCR(ID_lumi, IDSR_skim_path, 'FFID_skim', v,  args.indir, args.test)
-
-            #AIDSRSR_skim_path = 'FFAIDSR/FFAIDSR_FFAIDSR/h_FFAIDSR_FFAIDSR_%s' % AIDFF_var 
-            #IDSRSR_skim_path = 'FFIDSR/FFIDSR_FFIDSR/h_FFIDSR_FFIDSR_%s' % IDFF_var
-
-            #num_list, num_error = plotSR(ID_lumi, IDSRSR_skim_path, 'IDSR_skim', IDFF_var,  args.indir, args.test)
-            #denom_list, denom_error = plotSR(AID_lumi, AIDSRSR_skim_path, 'AIDSR_skim', AIDFF_var,  args.indir, args.test)
-
-            #FFs, FF_err = divideAndErrors(num_list, num_error, denom_list, denom_error)
 
     if args.test:
         print "Done"

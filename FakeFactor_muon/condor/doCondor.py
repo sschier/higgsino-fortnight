@@ -7,28 +7,28 @@ import time, datetime
 exe = '../FFMaker.py'
 ts = time.time()
 st = datetime.datetime.fromtimestamp(ts).strftime('%Y%m%d%H%M')
-base_dir = '/export/share/data/sschier/FakeLepton/mu_trigger_skims/'
+base_dir = '/export/share/data/sschier/FakeLepton/June22_2017_Stop1L_Dijet_Ntuple_AB_2.4.32_WithMoreIsolationVars/'
 
-arg_template = ' -input=%s -tree=ttbar -outfile=outputHist_ttbar.root'
-input_files = glob.glob(base_dir+'ttbar_skim/*')
-condor.run(exe, arg_template, input_files, dirname='ttbar_run_dir_%s' % st, nfiles=1)
+arg_template = ' -input=%s -tree=top_Nom -outfile=outputHist_ttbar.root'
+input_files = glob.glob(base_dir+'ttbar_mu_skims/job*/skim.root')
+condor.run(exe, arg_template, input_files, dirname='%s_nominal/ttbar' % st, nfiles=1)
 
-arg_template = ' -input=%s -tree=wjets_22 -outfile=outputHist_wjets.root'
-input_files = glob.glob(base_dir+'wjets_skim/*')
-condor.run(exe, arg_template, input_files, dirname='wjets_run_dir_%s' % st, nfiles=1)
+arg_template = ' -input=%s -tree=wjet_Nom -outfile=outputHist_wjets.root'
+input_files = glob.glob(base_dir+'wjets_mu_skims/job*/skim.root')
+condor.run(exe, arg_template, input_files, dirname='%s_nominal/wjets' % st, nfiles=1)
 
-arg_template = ' -input=%s -tree=zjets_22 -outfile=outputHist_zjets.root'
-input_files = glob.glob(base_dir+'zjets_skim/*')
-condor.run(exe, arg_template, input_files, dirname='zjets_run_dir_%s' % st, nfiles=1)
+arg_template = ' -input=%s -tree=zjet_Nom -outfile=outputHist_zjets.root'
+input_files = glob.glob(base_dir+'zjets_mu_skims/job*/skim.root')
+condor.run(exe, arg_template, input_files, dirname='%s_nominal/zjets' % st, nfiles=1)
 
-arg_template = ' -input=%s -tree=singletop -outfile=outputHist_singletop.root'
-input_files = glob.glob(base_dir+'singletop_skim/*')
-condor.run(exe, arg_template, input_files, dirname='singletop_run_dir_%s' % st, nfiles=1)
+arg_template = ' -input=%s -tree=top_Nom -outfile=outputHist_singletop.root'
+input_files = glob.glob(base_dir+'singletop_mu_skims/job*/skim.root')
+condor.run(exe, arg_template, input_files, dirname='%s_nominal/singletop' % st, nfiles=1)
 
-arg_template = ' -input=%s -isData=data16 -tree=CollectionTree -outfile=outputHist_data16.root'
-input_files = glob.glob(base_dir+'data16_skim/*')
-condor.run(exe, arg_template, input_files, dirname='data16_run_dir_%s' % st, nfiles=1)
+arg_template = ' -input=%s -isData=data16 -tree=data -outfile=outputHist_data16.root'
+input_files = glob.glob(base_dir+'data16_mu_skims/job*/skim.root')
+condor.run(exe, arg_template, input_files, dirname='%s_nominal/data16' % st, nfiles=1)
 
-arg_template = ' -input=%s -isData=data15 -tree=CollectionTree -outfile=outputHist_data15.root'
-input_files = glob.glob(base_dir+'data15_skim/*')
-condor.run(exe, arg_template, input_files, dirname='data15_run_dir_%s' % st, nfiles=1)
+arg_template = ' -input=%s -isData=data15 -tree=data -outfile=outputHist_data15.root'
+input_files = glob.glob(base_dir+'data15_mu_skims/job*/skim.root')
+condor.run(exe, arg_template, input_files, dirname='%s_nominal/data15' % st, nfiles=1)
