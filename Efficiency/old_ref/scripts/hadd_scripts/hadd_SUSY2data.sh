@@ -1,0 +1,21 @@
+hadd hadd_0.root job_0*/outputHist_data.root
+hadd hadd_10.root job_10*/outputHist_data.root
+hadd hadd_11.root job_11*/outputHist_data.root
+hadd hadd_12.root job_12*/outputHist_data.root
+hadd hadd_13.root job_13*/outputHist_data.root
+hadd hadd_14.root job_14*/outputHist_data.root
+hadd hadd_15.root job_15*/outputHist_data.root
+hadd hadd_16.root job_16*/outputHist_data.root
+hadd hadd_17.root job_17*/outputHist_data.root
+hadd hadd_18.root job_18*/outputHist_data.root
+hadd hadd_19.root job_19*/outputHist_data.root
+hadd hadd_2.root job_2*/outputHist_data.root
+hadd hadd_3.root job_3*/outputHist_data.root
+hadd hadd_4.root job_4*/outputHist_data.root
+hadd hadd_5.root job_5*/outputHist_data.root
+hadd hadd_6.root job_6*/outputHist_data.root
+hadd hadd_7.root job_7*/outputHist_data.root
+hadd hadd_8.root job_8*/outputHist_data.root
+hadd hadd_9.root job_9*/outputHist_data.root
+hadd outputHist_data.root hadd_*.root
+rm hadd_*.root

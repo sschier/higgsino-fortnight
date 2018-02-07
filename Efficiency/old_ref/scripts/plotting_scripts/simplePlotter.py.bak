@@ -1,0 +1,333 @@
+#!/usr/bin/env python
+
+#IMPORTS
+import ROOT
+import sys, copy, os
+import argparse, subprocess, commands
+import math
+
+#GLOBAL VARIABLES
+logYAxis = True
+
+#ATLAS STYLE
+ROOT.gROOT.LoadMacro("/export/home/prose/myPrograms/scripts/atlasstyle-00-03-05/AtlasUtils.C")
+ROOT.gROOT.LoadMacro("/export/home/prose/myPrograms/scripts/atlasstyle-00-03-05/AtlasStyle.C")
+ROOT.gROOT.LoadMacro("/export/home/prose/myPrograms/scripts/atlasstyle-00-03-05/AtlasLabels.C")
+ROOT.SetAtlasStyle()
+
+mc_names = ['ttv', 'zjets', 'singletop', 'diboson', 'ttbar', 'wjets'] 
+data_names = ['Data']
+signal_names = ['991500', '991502']
+#ROOT.gROOT.SetBatch(True)
+#======================================================================
+def GetRootFiles(dir, debug):
+    file_list = []
+    if not dir.endswith("/"): dir = dir + "/"
+    #status, files = commands.getstatusoutput('ls ' + dir)
+    files = commands.getoutput('ls ' + dir)
+    files = files.split("\n")
+    for f in files:
+        if f.endswith(".root"): file_list += [dir + f]
+    if debug: 
+        print dir
+        print file_list
+    return file_list
+#======================================================================
+def GetDataHists(file_list, hist_path, debug):
+    if debug: print 'getting data hists'
+    #hists = []
+    iter = 0
+    for name in file_list:
+        if IsData(name):
+            f = ROOT.TFile(name, 'READ')
+            keys = f.GetListOfKeys()
+            if debug:
+                print f.GetName()
+                print 'list of keys = '
+                for k in keys:
+                    print k.GetName()
+            h = f.Get(hist_path)
+            isTH1 = True
+            try: isTH1 = 'TH1' in h.ClassName()
+            except: 
+                isTH1 = False
+            if not isTH1:
+                f.Close()
+                continue
+            h.SetDirectory(0)
+            #hists.append(copy.deepcopy(h))
+            #hists[iter].SetDirectory(0)
+            f.Close()
+            iter = iter + 1
+
+    return h
+
+#======================================================================
+def SumMCHists(hists):
+    base = ROOT.TH1F('base', '',5, 250., 700)
+    for h, x in zip(hists, xrange(5)):
+        h.SetDirectory(0)
+        if x is 0:
+            base = copy.deepcopy(h)
+            base.SetDirectory(0)
+        else:
+            base.Add(h)
+    return base
+#======================================================================
+def GetMCHists(file_list, hist_path, debug):
+    if debug: print 'getting mc hists'
+    hists = []
+    iter = 0
+    for name in file_list:
+        print IsBkgnd(name)
+        if IsBkgnd(name):
+            f = ROOT.TFile(name, 'READ')
+            if debug: print 'file is %s' % f
+           # keys = f.GetListOfKeys()
+           # if debug:
+           #     print f.GetName()
+           #     print 'list of keys = '
+           #     for k in keys:
+           #         print k.GetName()
+            h = f.Get(hist_path)
+            isTH1 = True
+            try: isTH1 = 'TH1' in h.ClassName()
+            except: 
+                isTH1 = False
+            if not isTH1:
+                f.Close()
+                continue
+            h.SetDirectory(0)
+            hists.append(copy.deepcopy(h))
+            hists[iter].SetDirectory(0)
+            f.Close()
+            iter = iter + 1
+
+    if debug:
+        for h in hists:
+            print h
+    return hists
+
+#======================================================================
+def GetSignalHists(file_list, hist_path, debug):
+    if debug: print 'getting mc hists'
+    hists = []
+    iter = 0
+    for name in file_list:
+        print IsSignal(name)
+        if IsSignal(name):
+            f = ROOT.TFile(name, 'READ')
+            if debug: print 'file is %s' % f
+           # keys = f.GetListOfKeys()
+           # if debug:
+           #     print f.GetName()
+           #     print 'list of keys = '
+           #     for k in keys:
+           #         print k.GetName()
+            h = f.Get(hist_path)
+            isTH1 = True
+            try: isTH1 = 'TH1' in h.ClassName()
+            except: 
+                isTH1 = False
+            if not isTH1:
+                f.Close()
+                continue
+            h.SetDirectory(0)
+            hists.append(copy.deepcopy(h))
+            hists[iter].SetDirectory(0)
+            f.Close()
+            iter = iter + 1
+
+    if debug:
+        for h in hists:
+            print h
+    return hists
+
+#======================================================================
+#======================================================================
+def IsSignal(file_name):
+    isSignal = False
+    name = file_name.replace('.root', '').split('/')[-1].split('_')
+    print name
+    for n in name:
+        if n in signal_names:
+            isSignal =  True
+    return isSignal    
+
+#======================================================================
+#======================================================================
+def IsData(file_name):
+    isData = False
+    name = file_name.replace('.root', '').split('/')[-1].split('_')
+    print name
+    for n in name:
+        if n in data_names:
+            isData =  True
+    return isData    
+
+#======================================================================
+
+#======================================================================
+def IsBkgnd(file_name):
+    isBkgnd = False
+    name = file_name.replace('.root', '').split('/')[-1].split('_')
+    for n in name:
+        if n in mc_names:
+            isBkgnd =  True
+    return isBkgnd    
+
+#======================================================================
+def MakeHistStack(hists, debug):
+    hs = ROOT.THStack("hist stack", "hist stack")
+    #sortedHistTuple = sorted(hists,
+    sortedHistTuple = sorted(hists, key=lambda x: x.GetBinContent(x.GetMaximumBin()))
+    colors = [5, 3, 8, 2, 4, 7]  #[yellow, Lgreen, Dgreen, red, blue, cyan]
+
+    for h, c in zip(sortedHistTuple, colors):
+        if debug: print "adding hist to stack"
+        #hist = h.Clone("hist")
+        h.SetFillColor(c)
+        h.SetMarkerColor(c)
+        h.SetMarkerStyle(1)
+        h.SetMarkerSize()
+        h.SetDirectory(0)
+        hs.Add(h)
+    return hs
+
+#======================================================================
+def DataCanvas(region):
+    global logYAxis
+    c2 = ROOT.TCanvas("data_%s" % region, "data_%s" % region, 0, 0, 600, 600)
+    #c1.Divide(1,2,0,0)
+    p1 = ROOT.TPad("p1", "p1", 0, 0.3, 1, 1.0)
+    p1.SetBottomMargin(0)
+    if logYAxis: p1.SetLogy(ROOT.kTRUE)
+    c2.cd(1)
+    p1.Draw()
+
+    return c2, p1
+#======================================================================
+def SetCanvas(name, region):
+    global logYAxis
+    c1 = ROOT.TCanvas("%s_%s" % (name, region), "%s_%s" % (name, region), 0, 0, 600, 600)
+    #c1.Divide(1,2,0,0)
+    p1 = ROOT.TPad("p1", "p1", 0, 0.3, 1, 1.0)
+    p1.SetBottomMargin(0)
+    if logYAxis: p1.SetLogy(ROOT.kTRUE)
+    c1.cd(1)
+    p1.Draw()
+    p2 = ROOT.TPad("p2", "p2", 0, 0.0, 1, 0.3)
+    p2.SetTopMargin(0)
+    p2.SetBottomMargin(0.3)
+    c1.cd(2)
+    p2.Draw()
+
+    return c1, p1, p2
+
+#======================================================================
+def MakeLegend(bkgndHists, dataHist, region):
+
+    sortedHistTuple = sorted(bkgndHists, key=lambda x: x.GetBinContent(x.GetMaximumBin()))
+    if region == 'ttbar':
+        samples = ['ttv', 'zjets', 'singletop', 'diboson', 'wjets', 'ttbar']
+    else: 
+        samples = ['ttv', 'zjets', 'singletop','ttbar', 'diboson', 'wjets']
+
+    l = ROOT.TLegend(0.7, 0.65, 0.9, 0.9)
+    for hist, name in zip(sortedHistTuple, samples):
+        l.AddEntry(hist, name, 'f')
+    l.AddEntry(dataHist, 'data', 'l')
+
+    return l
+
+#======================================================================
+def MakeRatio(bkgndHist, dataHist):
+
+    rh = copy.deepcopy(dataHist)
+    rh.SetDirectory(0)
+    rh.Divide(bkgndHist)
+    rh.SetMinimum(0.5)
+    rh.SetMaximum(1.5)
+
+    return rh
+#======================================================================
+def plot(sample_path, region, variable, indir, debug):
+    if debug: print "opening output file"
+    o=ROOT.TFile("test.root", "RECREATE")
+    var = variable
+    MChist_list = GetMCHists(GetRootFiles(indir, 0), sample_path, debug)
+    m_data = GetDataHists(GetRootFiles(indir, 0), sample_path, debug)
+    m_hstack = MakeHistStack(MChist_list, debug)
+    m_hsum = SumMCHists(MChist_list)
+    m_ratio = MakeRatio(m_hsum, m_data)
+    m_legend = MakeLegend(MChist_list, m_data, region)
+    canvas, p1, p2 = SetCanvas('met', region)
+    p2.cd()
+    m_ratio.Draw("P")
+    p1.cd()
+    m_hstack.Draw("HIST")
+    m_data.Draw("PESAME")
+    o.cd()
+    m_hstack.Write()
+    canvas.Write()
+
+    m_legend.Draw()
+    ROOT.myText(       0.41,  0.85, 1, "#sqrt{s}= 13 TeV")
+    ROOT.myText(       0.41,  0.80, 1, "%s" % region)
+    ROOT.ATLASLabel(0.36,0.75,"Internal")
+    canvas.Print('%s.png' % sample_path)
+    c2, p3 = DataCanvas(region)
+    m_data.Draw()
+    raw_input("-->")
+    return True
+#======================================================================
+def main(argv):
+
+    parser = argparse.ArgumentParser(description="Command line arguments")
+    parser.add_argument("-vars"          , action='store', default='')
+    parser.add_argument("-indir"        , action='store', default='')
+    parser.add_argument("-outfile"      , action='store', default='')
+    parser.add_argument("--test"        , action='store_true')
+    parser.add_argument("-region"       , action='store', default="SR")
+    args=parser.parse_args()
+
+    print "Congratulations!"
+    var_list = []
+    variables = ['MET','nLep_signal', 'lep_type', 'Lep1Pt', 'Lep2Pt', 'ptll', 'mll', 'dphi_l1met', 'dphi_l2met', 'Mt_l1met','Mt_l2met', 'nJet20', 'Jet1Pt', 'Jet2Pt', 'dphi_j1met    ', 'dphi_j2met', 'dphi_l1l2', 'dR_l1l2']
+    variables1 = ['MET']
+
+    if args.vars == '0': var_list = variables
+    elif args.vars == '1': var_list = variables1
+
+    #var_list = variables
+    for v in var_list:
+        skim_path = 'presel/presel_skim/h_presel_skim_%s' % v
+        dilep_path = 'select/select_dilepton/h_select_dilepton_%s' % v
+        ossf_path = 'select/select_ossf/h_select_ossf_%s' % v
+        if args.test: print "running plot()"
+        plot(skim_path, 'skim', v,  args.indir, args.test)
+        plot(dilep_path, 'dilepton',v, args.indir, args.test)
+        plot(ossf_path, 'ossf',v, args.indir, args.test)
+    #ttbar_path = 'control/control_ttbar/h_control_ttbar_MET'
+    #wjets_path = 'control/control_wjets/h_control_wjets_MET'
+    #GetRootFiles(args.indir, args.test)
+    #GetRootHists(GetRootFiles(args.indir, 0), sample_path, args.test)
+    files = GetRootFiles(args.indir, 0)
+    #print files
+    #for f in files:
+    #    print 'is background? %s' % IsBkgnd(f)
+    #    print 'is data? %s' % IsData(f)
+
+    #SumMCHists(GetMCHists(GetRootFiles(args.indir, 0), sample_path, args.test)).Draw()
+    #plot(ttbar_path, 'ttbar',  args.indir, args.test)
+    #plot(wjets_path, 'wjets', args.indir, args.test)
+
+
+    if args.test:
+        print "Done"
+
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
+ #======================================================================

@@ -1,0 +1,12 @@
+hadd hadd_0.root job_0*/outputHist_zjets.root
+hadd hadd_1.root job_1*/outputHist_zjets.root
+hadd hadd_2.root job_2*/outputHist_zjets.root
+hadd hadd_3.root job_3*/outputHist_zjets.root
+hadd hadd_4.root job_4*/outputHist_zjets.root
+hadd hadd_5.root job_5*/outputHist_zjets.root
+hadd hadd_6.root job_6*/outputHist_zjets.root
+hadd hadd_7.root job_7*/outputHist_zjets.root
+hadd hadd_8.root job_8*/outputHist_zjets.root
+hadd hadd_9.root job_9*/outputHist_zjets.root
+hadd outputHist_zjets.root hadd_*.root
+rm hadd_*.root
