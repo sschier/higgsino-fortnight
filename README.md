@@ -1,8 +1,5 @@
 # higgsino-fortnight
 
-One Paragraph of project description goes here
-
-git clone https://github.com/sschier/higgsino-fortnight.git -b electron_j100
 
 
 ## Getting Started
