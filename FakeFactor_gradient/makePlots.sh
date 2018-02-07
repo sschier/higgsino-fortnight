@@ -1,14 +1,28 @@
-mkdir plots_gradient_new_norm2
-cd plots_gradient_new_norm2
-#mkdir plots_secondShowing
-#cd plots_secondShowing
-#python ../FFPlotter.py --test -vars='0'  -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor/condor/secondShowing/run_dir'
-#python ../FFPlotter.py --test -vars='0'  -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor/condor/almost_final/run_dir'
-python ../FFPlotter.py  -vars='0'  -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/run_dir_ptBin_new'
-#python ../FFPlotter.py  -vars='0'  -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/run_dir_7June'
-#python ../FFPlotter.py  -vars='0'  -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor/condor/run_dir_gradient'
-#python ../simplePlotter.py --test -vars='6'  -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/condor/SUSY2_Zmumu_runs'
-#python ../simplePlotter.py --test -vars='6'  -indir '/export/home/sschier/workarea/HistMaker/Higgsino_analysis/condor/hists_SUSY16_v01C'
-#python ../simplePlotter.py --test -vars='5'  -indir '/export/home/sschier/workarea/HistMaker/Higgsino_analysis/plotterDir_v05'
-#python ../histPlotter.py -vars='0'  -indir '/export/share/dirac/sschier/HistMaker_output/SUSY-analysis/Strong1L/scaleOutput' 
+mkdir plots_201709100528_j100
+cd plots_201709100528_j100
+#python ../FFPlotter.py -FFvar='pt' --doFF  --doCR -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+#python ../FFPlotter.py -FFvar='pt' --doDeco -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+python ../FFPlotter.py -FFvar='nbjet' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+python ../FFPlotter.py -FFvar='njet' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+python ../FFPlotter.py -FFvar='eta' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+python ../FFPlotter.py -FFvar='dphi-jm' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+python ../FFPlotter.py -FFvar='dphi-lm' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+python ../FFPlotter.py -FFvar='ht' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+python ../FFPlotter.py -FFvar='mu' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+python ../FFPlotter.py -FFvar='npv' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
 ..
+#mkdir plots_201709100548_j100_mtUP
+#cd plots_201709100548_j100_mtUP
+#python ../FFPlotter.py -FFvar='pt' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100548_j100_mtUP/run_dir'
+#..
+#mkdir plots_201709100550_j100_mtDOWN
+#cd plots_201709100550_j100_mtDOWN
+#python ../FFPlotter.py -FFvar='pt' --doFF -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100550_j100_mtDOWN/run_dir'
+#..
+#mkdir plots_201709100528_j100_renormSyst
+#cd plots_201709100528_j100_renormSyst
+#python ../FFPlotter.py -FFvar='pt' --doFF -renorm 'up' -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+#python ../FFPlotter.py -FFvar='pt' --doFF -renorm 'down' -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+#python ../FFPlotter.py -FFvar='pt' --doFF -renorm 'MET150' -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+#python ../FFPlotter.py -FFvar='pt' --doFF -normvar 'Mt' -indir '/export/share/dirac/sschier/HistMaker/Higgsino_analysis/FakeFactor_gradient/condor/201709100528_j100/run_dir'
+#..

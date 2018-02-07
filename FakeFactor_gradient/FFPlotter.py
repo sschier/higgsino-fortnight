@@ -156,7 +156,7 @@ def GetBGHists(file_list, hist_path, debug):
             print hists[k]
     return hists
 #======================================================================
-def SumMCHists(hist_list, lumi, debug):
+def SumHists(hist_list, lumi, debug):
     if debug:
         print 'in SumMC'
         print hist_list
@@ -174,7 +174,7 @@ def SumMCHists(hist_list, lumi, debug):
 #======================================================================
 def MakeDataStack(hist_list, lumi, debug):
     hs = ROOT.THStack("hist stack", "hist stack")
-    hsum = SumMCHists(hist_list, lumi, debug)
+    hsum = SumHists(hist_list, lumi, debug)
     #make list of hsum bin content to normalize stack hists
     sum_bin_list = []
     norm_hist_dict = {}
@@ -214,7 +214,7 @@ def MakeDataStack(hist_list, lumi, debug):
     #sortedKeyList = sorted(hist_list.keys())
     sortedKeyList = sorted(norm_hist_dict.keys())
     #colors = [40, 41, 42, 46, 49, 31, 38, 15]
-    colors = [5, 3, 8, 2, 4, 7, 9, 51, 6]  #[yellow, Lgreen, Dgreen, red, blue, cyan, indigo, purple, magenta]
+    colors = [5, 3, 8, 2, 4, 7, 9]  #[yellow, Lgreen, Dgreen, red, blue, cyan, indigo]
     markers = [33, 34, 20, 21, 29, 31, 23, 26, 25]     #[diamond, cross, circle, square, star, cross-hair, triangleup, opentriangledown, open-square
     colormap = {}
     markermap = {}
@@ -244,7 +244,7 @@ def MakeDataStack(hist_list, lumi, debug):
 #======================================================================
 def MakeHistStack(hist_list, lumi, debug):
     hs = ROOT.THStack("hist stack", "hist stack")
-    hsum = SumMCHists(hist_list, lumi, debug)
+    hsum = SumHists(hist_list, lumi, debug)
     maxVal = hsum.GetBinContent(hsum.GetMaximumBin())*1000000*lumi
     minVal = 1.
     sortedHistTuple = sorted(hist_list.items(), key=lambda x: x[1].GetBinContent(x[1].GetMaximumBin()))
@@ -419,7 +419,8 @@ def plotDeco(lumi, region, var, indir, debug):
     if debug: print "opening output file"
     o=ROOT.TFile("test.root", "RECREATE")
     if debug: print "Getting MC list"
-    if( var == 'Mt' or var == 'MET' ):
+    #if( var == 'Mt' or var == 'MET' ):
+    if( var == 'Mt'):
         deco_path_list = []
         data_path = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_%s' % var
         deco_path_list.append('AID1/AID1_FFAID/h_AID1_FFAID_%s' % var)
@@ -456,7 +457,7 @@ def plotDeco(lumi, region, var, indir, debug):
     m_data.SetMarkerSize(0.5)
     if debug: print "Making deco hist stack"
     m_dstack = MakeDataStack(deco_hist_list, lumi,  debug)
-    m_dsum = SumMCHists(deco_hist_list, lumi, debug)
+    m_dsum = SumHists(deco_hist_list, lumi, debug) #This is actually is the sum of the data histogramss separatd by Anti-ID definition
     m_ratio = MakeDecoRatio(m_data, m_dsum, debug)
     m_legend = MakeLegend(deco_hist_list, m_data, region)
     sum_bin_list = []
@@ -503,7 +504,7 @@ def plotCR(lumi, path, region, var, indir, debug):
     myRange = m_data.GetNbinsX()
     if debug: print "Making MC hist stack"
     m_hstack = MakeHistStack(BGhist_list, lumi,  debug)
-    m_hsum = SumMCHists(BGhist_list, lumi, debug)
+    m_hsum = SumHists(BGhist_list, lumi, debug)
     m_ratio = MakeNewRatio(m_data, m_hsum, debug)
     m_legend = MakeLegend(BGhist_list, m_data, region)
 
@@ -544,7 +545,7 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
     myRange = m_data.GetNbinsX()
     if debug: print "Making MC hist stack"
     m_hstack = MakeHistStack(BGhist_list, lumi,  debug)
-    m_hsum = SumMCHists(BGhist_list, lumi, debug)
+    m_hsum = SumHists(BGhist_list, lumi, debug)
     print '*********** %s Fakes Factors in %s ***********' % (region, var)
     if (var == 'Njet' ):
         sum1 = 0.0
@@ -778,12 +779,12 @@ def plotSR(lumi, sample_path, region, variable, indir, debug):
     canvas.Close()
     return value_list, error_list
 #======================================================================
-def renorm(lumi, path, region, var, indir, debug):
+def renorm(lumi, path, region, var, indir, syst, debug):
     if debug: print "opening output file"
     BGhist_list = GetBGHists(GetRootFiles(indir, debug), path, debug)
     m_data = GetDataHists(GetRootFiles(indir, debug), path, debug)
     m_hstack = MakeHistStack(BGhist_list, lumi,  debug)
-    m_hsum = SumMCHists(BGhist_list, lumi, debug)
+    m_hsum = SumHists(BGhist_list, lumi, debug)
     error_d = ROOT.Double()
     error_m = ROOT.Double()
     if debug: print var
@@ -793,16 +794,22 @@ def renorm(lumi, path, region, var, indir, debug):
         #integral_d = m_data.IntegralAndError(13, 20, error_d)
         #integral_m = m_hsum.IntegralAndError(13, 20, error_m)
     elif( var == 'MET' ):
-        #integral_d = m_data.IntegralAndError(12, 15, error_d) #bins for MET >150 GeV
-        #integral_m = m_hsum.IntegralAndError(12, 15, error_m)
-        integral_d = m_data.IntegralAndError(13, 15, error_d) #bins for MET >200 GeV
-        integral_m = m_hsum.IntegralAndError(13, 15, error_m)
+        if( syst == 'MET150' ):
+            integral_d = m_data.IntegralAndError(12, 15, error_d) #bins for MET >150 GeV
+            integral_m = m_hsum.IntegralAndError(12, 15, error_m)
+        else:
+            integral_d = m_data.IntegralAndError(13, 15, error_d) #bins for MET >200 GeV
+            integral_m = m_hsum.IntegralAndError(13, 15, error_m)
         #integral_d = m_data.IntegralAndError(14, 15, error_d) #bins for MET >300 GeV
         #integral_m = m_hsum.IntegralAndError(14, 15, error_m)
 
     renorm, error = divideAndError(integral_d, error_d, integral_m, error_m)
     print "normalization factor for %s = %f +- %f" %(region, renorm, error)
-    return renorm
+    if( syst == 'up' ):
+        return renorm*1.2
+    elif( syst == 'down' ):
+        return renorm*0.8
+    else: return renorm
 #======================================================================
 def main(argv):
 
@@ -810,14 +817,18 @@ def main(argv):
     parser.add_argument("-FFvar"        , action='store', default='')
     parser.add_argument("-indir"        , action='store', default='')
     parser.add_argument("-outfile"      , action='store', default='')
+    parser.add_argument("-normvar"      , action='store', default='')
     parser.add_argument("--test"        , action='store_true')
     parser.add_argument("--doDeco"      , action='store_true')
     parser.add_argument("--doFF2D"      , action='store_true')
     parser.add_argument("--doFF"        , action='store_true')
     parser.add_argument("--doFFDeco"    , action='store_true')
     parser.add_argument("--doCR"        , action='store_true')
+    parser.add_argument("--doCRmet"     , action='store_true')
+    parser.add_argument("--doCRmt"      , action='store_true')
     parser.add_argument("--doCR2D"      , action='store_true')
     parser.add_argument("--doNum"       , action='store_true')
+    parser.add_argument("-renorm"       , action='store', default='')
     parser.add_argument("-region"       , action='store', default="SR")
     args=parser.parse_args()
 
@@ -838,13 +849,17 @@ def main(argv):
         plotDeco(1.0, 'AID_deco', 'dphi_l1met', args.indir, args.test)
 ###################################################################################
     #Here do FF calc for every combiniation and plot decomposition for all AID electrons
+    if( args.renorm ): print "RENORM SYST %s" % args.renorm
     eta_list = ['07', '137', '152', '201', '247']
-    norm_var = 'MET'
-    #norm_var = 'Mt'
+    if( args.normvar ):
+        norm_var = args.normvar
+    else: norm_var = 'MET'
     ID_norm_path  = 'FFIDSR/FFIDSR_FFID/h_FFIDSR_FFID_%s' % norm_var
-    ID_lumi   = renorm(10.0, ID_norm_path,  'ID_norm', norm_var, args.indir, args.test)*10
     AID_norm_path = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_%s' % norm_var
-    AID_lumi  = renorm(10.0, AID_norm_path, 'AID_norm',norm_var, args.indir, args.test)*10
+    ID_lumi   = renorm(10.0, ID_norm_path,  'ID_norm', norm_var, args.indir, args.renorm, args.test)*10
+    AID_lumi  = renorm(10.0, AID_norm_path, 'AID_norm',norm_var, args.indir, args.renorm, args.test)*10
+    print "AID lumi %f" % AID_lumi
+    print "ID lumi %f" % ID_lumi
 
     if( args.doFF or args.doFF2D ):
         if( args.FFvar == 'eta' or args.FFvar == 'Eta' ):
@@ -893,7 +908,7 @@ def main(argv):
         denom_list, denom_error = plotSR(AID_lumi, AID_SR_path, 'AID', AIDFF_var,  args.indir, args.test)
         print 'Writing FFs'
         FFs, FF_err = divideAndErrors(num_list, num_error, denom_list, denom_error)
-        if args.doCR:
+        if( args.doCR ):
             print 'Making 1D CR plots'
             for v in variables_ID:
                 ID_CR_path = 'FFIDSR/FFIDSR_FFID/h_FFIDSR_FFID_%s' % v
@@ -903,6 +918,27 @@ def main(argv):
                 AID_CR_path  = 'FFAIDSR/FFAIDSR_FFAID/h_FFAIDSR_FFAID_%s' % v
                 plotCR(AID_lumi, AID_CR_path, 'AID', v,  args.indir, args.test)
         print '1D DONE %s' % args.FFvar 
+
+        if( args.doCRmet ):
+            print 'Making 1D CRmet plots'
+            for v in variables_ID:
+                ID_CRmet_path = 'FFIDSR/FFIDSR_FFIDCRmet/h_FFIDSR_FFIDCRmet_%s' % v
+                plotCR(ID_lumi, ID_CRmet_path, 'ID_met', v, args.indir, args.test)
+            for v in variables_AID:
+                AID_CRmet_path = 'FFAIDSR/FFAIDSR_FFAIDCRmet/h_FFAIDSR_FFAIDCRmet_%s' % v
+                plotCR(AID_lumi, AID_CRmet_path, 'AID_met', v, args.indir, args.test)
+
+        if( args.doCRmt ):
+            print 'Making 1D CRmt plots'
+            for v in variables_ID:
+                ID_CRmt_path = 'FFIDSR/FFIDSR_FFIDCRmt/h_FFIDSR_FFIDCRmt_%s' % v
+                plotCR(ID_lumi, ID_CRmt_path, 'ID_mt', v, args.indir, args.test)
+            for v in variables_AID:
+                AID_CRmt_path = 'FFAIDSR/FFAIDSR_FFAIDCRmt/h_FFAIDSR_FFAIDCRmt_%s' % v
+                plotCR(AID_lumi, AID_CRmt_path, 'AID_mt', v, args.indir, args.test)
+
+    ## Everything below is obsolete
+
 
     if args.doNum:
         AID_num_path = 'FFAIDSR/FFAIDSR_FFAIDSRNfill/h_FFAIDSR_FFAIDSRNfill_n_el'
