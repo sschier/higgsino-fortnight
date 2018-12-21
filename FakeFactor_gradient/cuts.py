@@ -19,7 +19,7 @@ class cuts:
         j1pt = obs.jet_pt[0]/1000.
         met = obs.met
 
-        #Make list of dictionaresy of cuts
+        #Make list of dictionaries of cuts
         Dics = []
         for el in IDlist:
             elPt = el.Pt()
